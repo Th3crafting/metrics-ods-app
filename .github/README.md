@@ -2,6 +2,7 @@
 
 La estructura del proyecto está organizada para separar claramente las capas del backend, los recursos de frontend, la base de datos, documentación y configuración de GitHub.
 
+```
 metrics-ods-app/
 │
 ├── .github/ # Configuraciones de GitHub (templates, workflows, etc.)
@@ -25,5 +26,6 @@ metrics-ods-app/
 ├── .gitignore # Archivos y carpetas ignoradas por Git
 │
 └── README.md # Información de la aplicación
+```
 
 Esta estructura sigue principios de arquitectura limpia, donde cada capa tiene responsabilidades bien definidas. Permite escalar el proyecto de forma organizada y mantener el código desacoplado.
