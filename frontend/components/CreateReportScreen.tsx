@@ -18,8 +18,10 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import Button from "./ui/Button";
 
 import Slider from "@react-native-community/slider";
+
 
 export default function CreateReportScreen() {
   const router = useRouter();
@@ -35,15 +37,7 @@ export default function CreateReportScreen() {
     { id: "ruido", label: "Ruido", icon: Volume2, color: "#7c3aed" },
   ];
 
-  const handleContinue = () => {
-    const reportData = {
-      type: selectedType,
-      description,
-      urgencyLevel,
-    };
-    console.log("Reporte enviado:", reportData);
-    // 🚀 aquí podrías redirigir al resumen o enviar al backend
-  };
+  
 
   return (
     <View style={styles.container}>
@@ -164,16 +158,9 @@ export default function CreateReportScreen() {
         </View>
 
         {/* Continue Button */}
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            (!selectedType || !description.trim()) && styles.buttonDisabled,
-          ]}
-          disabled={!selectedType || !description.trim()}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueText}>Continuar</Text>
-        </TouchableOpacity>
+        <Button title="Continuar" onPress={(handleContinue)=> router.push("/report-details")}
+           />
+        
       </ScrollView>
     </View>
   );
