@@ -7,16 +7,10 @@ import Button from "./ui/Button";
 import Sidebar from "./ui/Sidebar";
 
 
-interface WelcomeScreenProps {
-  onNavigateToMain: () => void;
-}
 
-export default function WelcomeScreen({ onNavigateToMain }: WelcomeScreenProps) {
+
+export default function WelcomeScreen() {
   const [open, setOpen] = React.useState(false);
-
-  function setSidebarVisible(arg0: boolean) {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <View style={styles.container}>
@@ -33,10 +27,7 @@ export default function WelcomeScreen({ onNavigateToMain }: WelcomeScreenProps) 
         <Sidebar
           visible={open}
           onClose={() => setOpen(false)}
-           onCreateReport={() => {
-          setSidebarVisible(false);
-          router.push("/report");
-        }}
+           onCreateReport={() =>setOpen(false)}
           onMyReports={() => setOpen(false)}
           onHowTo={() => setOpen(false)}
           onSettings={() => setOpen(false)}
@@ -51,7 +42,7 @@ export default function WelcomeScreen({ onNavigateToMain }: WelcomeScreenProps) 
             Conectando vecinos para un barrio más sostenible
           </Text>
 
-          <Button title="+ Crear Nuevo Reporte" onPress={onNavigateToMain} />
+          <Button title="+ Crear Nuevo Reporte"  onPress={() => router.push("/report")}/>
         </View>
 
         {/* Card Reporta */}

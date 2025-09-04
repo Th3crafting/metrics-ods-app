@@ -50,11 +50,7 @@ function MenuItem({ icon, title, subtitle, onPress }: MenuItemProps) {
 
 export default function Sidebar({
   visible,
-  onClose,
-  onCreateReport,
-  onMyReports,
-  onHowTo,
-  onSettings,
+  onClose
 }: SidebarProps): React.JSX.Element {
   // animaciones
   const slideX = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
@@ -76,7 +72,7 @@ export default function Sidebar({
   }, [visible, slideX, overlayOpacity]);
 
 
-  // 🔑 Aquí aseguramos que el sidebar siempre se monte encima de Welcome
+
   return (
     <View
       style={styles.root}
@@ -140,19 +136,28 @@ export default function Sidebar({
             icon={<FileText size={22} color="#3b82f6" />}
             title="Mis Reportes"
             subtitle="Ver historial de reportes"
-            onPress={onMyReports}
+            onPress={() =>{
+              onClose();
+              router.push("/my-reports")
+            }}
           />
           <MenuItem
             icon={<BookOpen size={22} color="#ec4899" />}
             title="Cómo Usar"
             subtitle="Guía de la aplicación"
-            onPress={onHowTo}
+            onPress={() =>{
+              onClose();
+              router.push("/welcome")
+            }}
           />
           <MenuItem
             icon={<Settings size={22} color="#4b5563" />}
             title="Configuración"
             subtitle="Ajustes de la cuenta"
-            onPress={onSettings}
+            onPress={() =>{
+              onClose();
+              router.push("/settings")
+            }}
           />
         </View>
 
