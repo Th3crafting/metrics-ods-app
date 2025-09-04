@@ -21,10 +21,6 @@ export default function LoginScreen(){
     
   };
 
-  const handleModeratorLogin = () => {
-    Alert.alert("Moderador", "Acceso como moderador");
-  };
-
   return (
     <View style={styles.container}>
       {/* Status bar fake */}
@@ -67,7 +63,7 @@ export default function LoginScreen(){
           <Text style={styles.forgot}>¿Olvidó su contraseña?</Text>
         </TouchableOpacity>
 
-       <GradientButton title="ACCESO MODERADOR" onPress={handleModeratorLogin} icon={<Shield size={18} color="#fff"></Shield>}/>
+       <GradientButton title="ACCESO MODERADOR" onPress={() => router.push("/moderator-dashboard")} icon={<Shield size={18} color="#fff"></Shield>}/>
 
         <TouchableOpacity
           style={styles.buttonOutline}
