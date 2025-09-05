@@ -1,9 +1,23 @@
 import { Checkbox } from 'expo-checkbox';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Button from "./ui/Button";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+
+const { width } = Dimensions.get("window"); 
+
+
+const validateEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Valida formato básico de correo
+  return emailRegex.test(email);
+}
+
+const validatePassword = (password: string) => {
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+  return passwordRegex.test(password);
+};
 
 
 export default function RegisterScreen( ) {
@@ -14,6 +28,18 @@ export default function RegisterScreen( ) {
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const handleRegister = () => {
+
+    if (!validateEmail(email)) {
+          Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      return;
+    }
+    if (!validatePassword(password)) {
+          Alert.alert(
+            'Error',
+            'La contraseña debe tener al menos 6 caracteres, incluyendo una letra y un número.'
+    );
+      return;
+    }
     if (password !== confirmPassword) {
       Alert.alert("Error", "Las contraseñas no coinciden");
       return;
@@ -29,20 +55,19 @@ export default function RegisterScreen( ) {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Status bar fake */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <View style={styles.dot} />
-          <View style={styles.dot} />
-          <View style={styles.dot} />
-          <View style={[styles.dot, { backgroundColor: "#ccc" }]} />
-          <View style={styles.battery}>
-            <View style={styles.batteryLevel} />
-          </View>
-        </View>
-      </View>
+    <SafeAreaView style={styles.safe}>
+
+      <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" :
+        undefined}
+        style={{flex: 1}}
+        >
+
+        <ScrollView
+                contentContainerStyle={styles.scroll}
+                keyboardShouldPersistTaps="handled"
+              >    
+  
 
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text style={styles.title}>¡Únete a NodoVerde!</Text>
@@ -86,23 +111,45 @@ export default function RegisterScreen( ) {
         </View>
       </View>
 
-      {/* Home indicator */}
+      </ScrollView>
+      </KeyboardAvoidingView>
       <View style={styles.homeIndicator} />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, backgroundColor: "#fff" },
-  statusBar: { flexDirection: "row", justifyContent: "space-between", marginBottom: 24 },
-  time: { fontSize: 14, fontWeight: "500" },
-  statusIcons: { flexDirection: "row", alignItems: "center", gap: 4 },
-  dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: "#000" },
-  battery: { marginLeft: 8, width: 24, height: 12, borderWidth: 1, borderRadius: 3, justifyContent: "center" },
-  batteryLevel: { width: 16, height: 8, marginLeft: 2, backgroundColor: "#000", borderRadius: 2 },
-  title: { fontSize: 20, fontWeight: "600", textAlign: "center", marginBottom: 4, color: "#111" },
-  subtitle: { fontSize: 14, textAlign: "center", marginBottom: 24, color: "#555" },
-  input: { borderWidth: 2, borderColor: "#21BD48", borderRadius: 8, padding: 12, marginBottom: 12 },
+   safe: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+    scroll: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 28,
+  },
+
+  title: { 
+    fontSize: width * 0.06, 
+    fontWeight: "600", 
+    textAlign: "center",
+     marginBottom: 4, 
+     color: "#111" 
+  },
+  subtitle: {
+    fontSize: 14, 
+    textAlign: "center", 
+    marginBottom: 24, 
+    color: "#555" 
+  },
+  input: { 
+    borderWidth: 2,
+    borderColor: "#21BD48",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 18,
+    width: "100%",
+  },
   buttonPrimary: { backgroundColor: "#069865", padding: 16, borderRadius: 8, marginTop: 16, alignItems: "center" },
   buttonText: { color: "#fff", fontWeight: "600" },
   terms: { flexDirection: "row", alignItems: "flex-start", marginTop: 16, gap: 8 },
