@@ -1,15 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { ReporteEntity } from "./ReporteEntity";
 
-@Entity({name: "tipo_reporte"})
+@Entity("tipos_reportes")
 export class TipoReporteEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    tip_id!:number;
+  @Column()
+  nombre!: string;
 
-    @Column({type: "character varying", length: 100})
-    tip_descripcion!:string;
-
-    @OneToMany(() => ReporteEntity, (r) => r.tipo)
-    reportes!:ReporteEntity[];
+  @OneToMany(() => ReporteEntity, (reporte) => reporte.tipo)
+  reportes!: ReporteEntity[];
 }

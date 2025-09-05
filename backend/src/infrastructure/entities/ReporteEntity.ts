@@ -1,36 +1,34 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { TipoReporteEntity } from './TipoReporteEntity';
-import { UsuarioEntity } from './UsuarioEntity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { UsuarioEntity } from "./UsuarioEntity";
+import { TipoReporteEntity } from "./TipoReporteEntity";
+import { SectorEntity } from "./SectorEntity";
 
-@Entity({name: "reporte"})
+@Entity("reportes")
 export class ReporteEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    rep_id!: number;
+  @Column()
+  descripcion!: string;
 
-    @ManyToOne(() => TipoReporteEntity, (t) => t.reportes, {nullable:false})
-    @JoinColumn({name:"tip_id"})
-    tipo!: TipoReporteEntity;
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  fecha!: Date;
 
-    @Column({type:"character varying", length:255})
-    rep_descripcion!: string;
+  @Column({ nullable: true })
+  direccion!: string;
 
-    @Column({type:"character varying", length:255})
-    rep_url_imagen!: string;
+  @Column("decimal", { precision: 10, scale: 6, nullable: true })
+  lat!: number;
 
-    @Column({type:"int"})
-    rep_nivel_incidencia!: number;
+  @Column("decimal", { precision: 10, scale: 6, nullable: true })
+  lng!: number;
 
-    @ManyToOne(() => UsuarioEntity, (u) => u.reportes, {nullable:false})
-    @JoinColumn({name:"usu_id"})
-    usuario!: UsuarioEntity;
+  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.reportes)
+  usuario!: UsuarioEntity;
 
-    @CreateDateColumn({type:"timestamptz", name:"rep_created_at", default: () => "now()"})
-    rep_created_at!: Date;
+  @ManyToOne(() => TipoReporteEntity, (tipo) => tipo.reportes)
+  tipo!: TipoReporteEntity;
 
-    @UpdateDateColumn({type:"timestamptz", name:"rep_updated_at", default: () => "now()"})
-    rep_updated_at!: Date;
-
-    @Column({type:"date", name:"rep_fecha", default: () => "now()"})
-    rep_fecha!: string;
+  @ManyToOne(() => SectorEntity, (sector) => sector.reportes)
+  sector!: SectorEntity;
 }

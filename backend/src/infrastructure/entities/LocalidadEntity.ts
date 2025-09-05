@@ -1,16 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { SectorEntity } from "./SectorEntity";
 
-
-@Entity({name:"localidad"})
+@Entity("localidades")
 export class LocalidadEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    loc_id!: number;
+  @Column()
+  nombre!: string;
 
-    @Column({type:"character varying", length:30})
-    loc_descripcion!: string;
-
-    @OneToMany(() => SectorEntity, (s) => s.localidad)
-    sectores!: SectorEntity[];
+  @OneToMany(() => SectorEntity, (sector) => sector.localidad)
+  sectores!: SectorEntity[];
 }
