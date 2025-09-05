@@ -27,10 +27,10 @@ export default function Button({ title, onPress, style, textStyle, disabled, ico
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#069865", // teal-600
-    paddingVertical: 14,
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-     marginTop: 8,
+     marginTop: 12,
     justifyContent: "center",
   },
   text: {
@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   disabled: {
-    backgroundColor: "#94a3b8", // gray-400
+    backgroundColor: "#06986571", // gray-400
   },
 });

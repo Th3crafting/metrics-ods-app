@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
   BookOpen,
@@ -78,7 +79,7 @@ export default function Sidebar({
       style={styles.root}
       pointerEvents={visible ? "auto" : "none"}
     >
-      {/* Overlay clicable para cerrar */}
+      {/*  clicable para cerrar */}
       <Animated.View
         style={[styles.overlay, { opacity: overlayOpacity }]}
       />
@@ -88,24 +89,35 @@ export default function Sidebar({
         onPress={onClose}
       />
 
-      {/* Drawer */}
+  
       <Animated.View
         style={[
           styles.drawer,
           { transform: [{ translateX: slideX }] },
         ]}
       >
-        {/* Header */}
-        <View style={styles.header}>
+     <View style={{ borderRadius: 5, overflow: "hidden", marginBottom: 8 }}>
+        <LinearGradient
+          colors={["#21BD48", "#069865"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.headerGradient}
+        >
+          {/* Botón cerrar arriba */}
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
             <X size={20} color="#fff" />
           </TouchableOpacity>
-          <View style={styles.avatar}>
-            <User size={32} color="#16a34a" />
+
+    {/* Avatar + datos usuario */}
+          <View style={styles.userInfo}>
+            <View style={styles.avatar}>
+              <User size={32} color="#16a34a" />
+            </View>
+            <Text style={styles.name}>Usuario NodoVerde</Text>
+            <Text style={styles.email}>usuario@gmail.com</Text>
           </View>
-          <Text style={styles.name}>Usuario NodoVerde</Text>
-          <Text style={styles.email}>usuario@gmail.com</Text>
-        </View>
+        </LinearGradient>
+      </View> 
 
         {/* Stats */}
         <View style={styles.stats}>
@@ -171,7 +183,7 @@ export default function Sidebar({
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: 999, // 🔑 asegura que quede por encima de Welcome
+    zIndex: 999, // encima de Welcome
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -191,20 +203,53 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
   },
+  headerGradient: {
+  padding: 20,
+  alignItems: "center",
+  justifyContent: "center",
+  position: "relative",
+},
+
+closeBtn: {
+  position: "absolute",
+  top: 16,
+  right: 16,
+  backgroundColor: "rgba(0,0,0,0.2)",
+  padding: 6,
+  borderRadius: 20,
+},
+
+userInfo: {
+  marginTop: 10,
+  alignItems: "center",
+},
+
+avatar: {
+  width: 64,
+  height: 64,
+  borderRadius: 32,
+  backgroundColor: "#fff",
+  alignItems: "center",
+  justifyContent: "center",
+  marginBottom: 8,
+},
+
+name: {
+  fontSize: 16,
+  fontWeight: "600",
+  color: "#fff",
+},
+
+email: {
+  fontSize: 13,
+  color: "#e5e5e5",
+},
+
   header: {
     backgroundColor: "#16a34a",
     alignItems: "center",
     paddingVertical: 24,
   },
-  closeBtn: { position: "absolute", top: 16, right: 16 },
-  avatar: {
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    padding: 8,
-    marginBottom: 8,
-  },
-  name: { color: "#fff", fontWeight: "600", fontSize: 16 },
-  email: { color: "#e5e5e5", fontSize: 12 },
   stats: {
     flexDirection: "row",
     justifyContent: "space-around",
