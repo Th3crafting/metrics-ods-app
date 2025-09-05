@@ -2,7 +2,6 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Check } from "lucide-react-native";
-import Button from "./ui/Button";
 
 export default function ReportSuccessScreen() {
   const router = useRouter();
@@ -12,10 +11,10 @@ export default function ReportSuccessScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={{ fontSize: 24 }}>←</Text>
+          <Text style={{ fontSize: 16 }}>←</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Nuevo Reporte</Text>
-        <View style={{ width: 28 }} />
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Card */}
@@ -32,15 +31,17 @@ export default function ReportSuccessScreen() {
 
       {/* Botón */}
       <TouchableOpacity
+        style={styles.backBtn}
+        onPress={() => router.push("/welcome")}
       >
-        <Button title="Volver al Inicio" onPress={() => router.push("/welcome")}></Button>
+        <Text style={styles.backBtnText}>Volver al inicio</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", padding: 16 },
+  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -49,16 +50,11 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f9fafb",
     padding: 24,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 24,
-     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 4,
-    elevation: 3,
   },
   title: { fontSize: 20, fontWeight: "700", color: "#111827", marginVertical: 12 },
   message: { fontSize: 14, textAlign: "center", color: "#374151", marginBottom: 8 },
