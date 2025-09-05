@@ -35,6 +35,17 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 10. # Picker
 => npm install @react-native-picker/picker
+expo install expo-image-picker
+
+10. # av = video
+=> expo install expo-av
+
+10. # av = video
+=> expo install react-native-picker-select
+
+
+
+
 
 
 
