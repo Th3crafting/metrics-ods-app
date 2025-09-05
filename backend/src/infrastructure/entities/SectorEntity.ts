@@ -1,21 +1,18 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
+import { ReporteEntity } from "./ReporteEntity";
 import { LocalidadEntity } from "./LocalidadEntity";
-import { UsuarioEntity } from "./UsuarioEntity";
 
-
-@Entity({name:"sector"})
+@Entity("sectores")
 export class SectorEntity {
-    
-    @PrimaryGeneratedColumn()
-    sec_id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @ManyToOne(() => LocalidadEntity, (l) => l.sectores, {nullable:false})
-    @JoinColumn({name:"loc_id"})
-    localidad!: LocalidadEntity;
+  @Column()
+  nombre!: string;
 
-    @Column({type:"character varying", length:255})
-    sec_direccion!: string;
+  @ManyToOne(() => LocalidadEntity, (localidad) => localidad.sectores)
+  localidad!: LocalidadEntity;
 
-    @OneToMany(() => UsuarioEntity, (u) => u.sector)
-    usuarios!: UsuarioEntity[];
+  @OneToMany(() => ReporteEntity, (reporte) => reporte.sector)
+  reportes!: ReporteEntity[];
 }

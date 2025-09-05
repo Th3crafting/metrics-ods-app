@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { ArrowLeft, Camera } from "lucide-react-native";
 import { useRouter } from "expo-router";
-import Button from "./ui/Button";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -12,66 +11,66 @@ export default function SettingsScreen() {
   const [localidad, setLocalidad] = useState("");
 
   return (
-    <SafeAreaView style={styles.safe}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <ArrowLeft size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Configuración</Text>
-          <View style={{ width: 24 }} />
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <ArrowLeft size={24} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Configuración</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      {/* Foto de perfil */}
+      <TouchableOpacity style={styles.avatarBox}>
+        <View style={styles.avatarCircle}>
+          <Camera size={28} color="#16a34a" />
         </View>
+        <Text style={styles.avatarText}>Toca para cambiar tu foto</Text>
+      </TouchableOpacity>
 
-        {/* Foto de perfil */}
-        <TouchableOpacity style={styles.avatarBox}>
-          <View style={styles.avatarCircle}>
-            <Camera size={28} color="#16a34a" />
-          </View>
-          <Text style={styles.avatarText}>Toca para cambiar tu foto</Text>
-        </TouchableOpacity>
+      {/* Campos */}
+      <TextInput
+        placeholder="Nombre y Apellido"
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        placeholder="Correo Electrónico"
+        style={styles.input}
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        placeholder="Dirección de residencia"
+        style={styles.input}
+        value={address}
+        onChangeText={setAddress}
+      />
+      <TextInput
+        placeholder="Localidad de residencia"
+        style={styles.input}
+        value={localidad}
+        onChangeText={setLocalidad}
+      />
 
-        {/* Campos */}
-        <TextInput
-          placeholder="Nombre y Apellido"
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          placeholder="Correo Electrónico"
-          style={styles.input}
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          placeholder="Dirección de residencia"
-          style={styles.input}
-          value={address}
-          onChangeText={setAddress}
-        />
-        <TextInput
-          placeholder="Localidad de residencia"
-          style={styles.input}
-          value={localidad}
-          onChangeText={setLocalidad}
-        />
+      {/* Botón Guardar */}
+      <TouchableOpacity style={styles.saveBtn}>
+        <Text style={styles.saveText}>Guardar Cambios</Text>
+      </TouchableOpacity>
 
-        <Button title={"Guardar cambios"} onPress={() => router.push("/welcome")} />
-
-        <TouchableOpacity style={styles.logoutBtn}>
-          <Text style={styles.logoutText} onPress={() => router.push("/")}>
-            Cerrar Sesión
-          </Text>
-        </TouchableOpacity>
-  
-    </SafeAreaView>
+      {/* Cerrar sesión */}
+      <TouchableOpacity style={styles.logoutBtn}>
+        <Text style={styles.logoutText}>Cerrar Sesión</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" }, // 👈 asegura el encuadre
- 
+  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   avatarBox: { alignItems: "center", marginBottom: 20 },
