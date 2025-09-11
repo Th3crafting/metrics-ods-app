@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Dimensions } from "react-native";
 import { ArrowLeft, Trash2, Droplets } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Report = {
   id: string;
@@ -11,6 +12,8 @@ type Report = {
   status: "Rechazado" | "Pendiente" | "Realizado";
   date: string;
 };
+
+const { width } = Dimensions.get("window");  
 
 const reports: Report[] = [
   { id: "1", type: "basura", description: "Basura acumulada cerca al restaurante", status: "Rechazado", date: "19 ene" },
@@ -42,24 +45,27 @@ export default function MyReportsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : undefined}
-              style={{ flex: 1}}
-            >
-
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <ArrowLeft size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Mi HiIIIstorIA
-            ial</Text>
-          <View style={{ width: 24 }} />
-        </View>
+  <SafeAreaView style={styles.safe}>
+       <KeyboardAvoidingView
+         behavior={Platform.OS === "ios" ? "padding" : undefined}
+         style={{ flex: 1}}
+       >
+          
+         <View style={styles.header}>
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <ArrowLeft size={24} color="#000" />
+                  </TouchableOpacity>
+                  <Text style={styles.headerTitle}> Historial de Reportes</Text>
+                  <View style={{ width: 28 }} />
+                </View>
+        
+         <ScrollView
+                contentContainerStyle={styles.scroll}
+                keyboardShouldPersistTaps="handled"
+              >
 
         {/* Stats */}
-        <View style={{ borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
+        <View style={{ borderRadius: 15, overflow: "hidden", marginBottom: 18 }}>
           <LinearGradient
             colors={["#21BD48", "#069865"]}
             start={{ x: 0, y: 0 }}
@@ -86,7 +92,7 @@ export default function MyReportsScreen() {
         </View>
 
         {/* List */}
-        <ScrollView style={{ marginTop: 12 }}>
+        
           {filteredReports.map((r) => {
             const status = getStatusStyle(r.status);
             return (
@@ -114,22 +120,66 @@ export default function MyReportsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" },
-  container: { flex: 1, padding: 16 },
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
-  headerTitle: { fontSize: 18, fontWeight: "600" },
-  statsNumber: { color: "#fff", fontSize: 20, fontWeight: "700" },
-  statsText: { color: "#fff", marginTop: 4 },
-  statsNew: { color: "#bbf7d0", marginTop: 2, fontSize: 12 },
+  safe: { 
+    flex: 1, 
+    backgroundColor: "#fff" 
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: 18,
+    paddingBottom: 30, // espacio extra abajo
+  },
+    title: {
+    fontSize: width * 0.06, // relativo al ancho del dispositivo
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 24,
+    color: "#111",
+  },
+    header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+  },
+  headerTitle: { 
+    fontSize: 18, 
+    fontWeight: "600" 
+  },
+  statsNumber: { 
+    color: "#fff", 
+    fontSize: 20, 
+    fontWeight: "700" 
+  },
+  statsText: { 
+    color: "#fff", 
+    marginTop: 4 
+  },
+  statsNew: { 
+    color: "#bbf7d0", 
+    marginTop: 2, 
+    fontSize: 12 
+  },
   filters: { 
-    marginTop: 8,
+    marginTop: 5,
     flexDirection: "row", 
     justifyContent: "space-around", 
-    marginBottom: 8 
+    marginBottom: 18
   },
-  filterBtn: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 20, backgroundColor: "#f3f4f6" },
-  filterActive: { backgroundColor: "#21BD48" },
-  filterText: { fontSize: 14, color: "#374151" },
+  filterBtn: { 
+    paddingVertical: 6, 
+    paddingHorizontal: 12, 
+    borderRadius: 20, 
+    backgroundColor: "#f3f4f6" 
+  },
+  filterActive: { 
+    backgroundColor: "#21BD48" 
+  },
+  filterText: { 
+    fontSize: 14, 
+    color: "#374151" 
+
+  },
   reportCard: { 
     backgroundColor: "#fff", 
     borderRadius: 8, 
@@ -141,9 +191,29 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3
   },
-  reportHeader: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 4 },
-  reportType: { fontWeight: "600", marginLeft: 6 },
-  statusBox: { marginLeft: "auto", paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
-  reportDesc: { fontSize: 14, color: "#374151", marginBottom: 4 },
-  reportDate: { fontSize: 12, color: "#6b7280" },
+  reportHeader: { 
+    flexDirection: "row", 
+    alignItems: "center", 
+    gap: 6, 
+    marginBottom: 4 
+  },
+  reportType: { 
+    fontWeight: "600", 
+    marginLeft: 6 
+  },
+  statusBox: { 
+    marginLeft: "auto", 
+    paddingHorizontal: 8, 
+    paddingVertical: 2, 
+    borderRadius: 8 
+  },
+  reportDesc: { 
+    fontSize: 14, 
+    color: "#374151", 
+    marginBottom: 4 
+  },
+  reportDate: { 
+    fontSize: 12, 
+    color: "#6b7280" 
+  },
 });

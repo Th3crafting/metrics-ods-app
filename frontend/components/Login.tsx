@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Shield } from "lucide-react-native";
+
 import React, { useState } from "react";
 import {
   Alert,
@@ -14,7 +14,6 @@ import {
   Dimensions
 } from "react-native";
 import Button from "./ui/Button";
-import GradientButton from "./ui/GradientButton";
 
 const { width } = Dimensions.get("window");  
 
@@ -84,12 +83,6 @@ export default function LoginScreen() {
           <TouchableOpacity>
             <Text style={styles.forgot}>¿Olvidó su contraseña?{"\n"}</Text>
           </TouchableOpacity>
-
-          <GradientButton
-            title="ACCESO MODERADOR"
-            onPress={() => router.push("/moderator-dashboard")}
-            icon={<Shield size={18} color="#fff" />}
-          />
 
           <TouchableOpacity
             style={styles.buttonOutline}

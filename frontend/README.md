@@ -42,7 +42,7 @@ expo install expo-image-picker
 
 10. # av = video
 => expo install react-native-picker-select
-
+ 
 
 
 

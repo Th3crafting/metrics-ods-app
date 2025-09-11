@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   }, 
   pickerWrapper: {
     borderWidth: 1.5,
-    borderColor: "#9CA3AF",
+    borderColor: "#16a34a",
     borderRadius: 8,
     marginTop: 4,
     marginBottom: 5,

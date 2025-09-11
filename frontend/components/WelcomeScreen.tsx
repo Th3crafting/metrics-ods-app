@@ -33,16 +33,16 @@ export default function WelcomeScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Header */}
+
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setOpen(true)}>
               <Menu size={28} color="#111" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>NodoVerde</Text>
-            <View style={{ width: 28 }} /> {/* espacio balanceado */}
+            <View style={{ width: 28 }} /> 
           </View>
 
-          {/* Sidebar encima de todo */}
+         
           <Sidebar
             visible={open}
             onClose={() => setOpen(false)}
@@ -71,8 +71,8 @@ export default function WelcomeScreen() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Reporta lo que importa</Text>
               <Text style={styles.cardSubtitle}>
-                ¿Has visto basura acumulada, fugas de agua o ruidos molestos?{" "}
-                Con NodoVerde puedes reportar problemas ambientales en minutos.{" "}
+                ¿Has visto basura acumulada, fugas de agua o ruidos molestos?
+                Con NodoVerde puedes reportar problemas ambientales en minutos.
                 Tu voz cuenta para que las autoridades y vecinos actúen
                 rápidamente
 
@@ -136,7 +136,7 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#f5f5f5c3",
+    backgroundColor: "#ffffffe2",
   },
   scroll: {
     flexGrow: 1,

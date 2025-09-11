@@ -207,7 +207,7 @@ export default function CreateReportScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#f5f5f5c3",
+    backgroundColor: "#ffffffe2",
   },
   scroll: {
     flexGrow: 1,

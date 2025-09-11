@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { ArrowLeft, Camera } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import Button from "./ui/Button";
@@ -12,7 +12,16 @@ export default function SettingsScreen() {
   const [localidad, setLocalidad] = useState("");
 
   return (
-    <SafeAreaView style={styles.safe}>
+     <SafeAreaView style={styles.safe}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            style={{ flex: 1}}
+          >
+    
+            <ScrollView
+              contentContainerStyle={styles.scroll}
+              keyboardShouldPersistTaps="handled"
+            >
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
@@ -65,14 +74,28 @@ export default function SettingsScreen() {
           </Text>
         </TouchableOpacity>
   
+</ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" }, // 👈 asegura el encuadre
- 
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
+    safe: {
+    flex: 1,
+    backgroundColor: "#ffffffe2",
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: 28,
+    paddingBottom: 60, // espacio extra abajo
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 30,
+  },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   avatarBox: { alignItems: "center", marginBottom: 20 },
   avatarCircle: {
@@ -80,9 +103,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e7eb", alignItems: "center", justifyContent: "center",
   },
   avatarText: { marginTop: 8, fontSize: 12, color: "#6b7280" },
-  input: { borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8, padding: 12, marginBottom: 12 },
+  input: { 
+    borderWidth: 1, 
+ borderColor: "#21BD48", 
+    borderRadius: 8, 
+    padding: 12, 
+    marginBottom: 12 
+  },
   saveBtn: {
-    backgroundColor: "#16a34a", padding: 16, borderRadius: 999, alignItems: "center", marginTop: 8,
+    backgroundColor: "#16a34a", 
+    padding: 16, 
+    borderRadius: 999, 
+    alignItems: "center", 
+    marginTop: 8,
   },
   saveText: { color: "#fff", fontWeight: "600", fontSize: 16 },
   logoutBtn: { alignItems: "center", marginTop: 16 },

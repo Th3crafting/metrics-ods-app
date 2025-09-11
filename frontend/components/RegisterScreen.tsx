@@ -113,7 +113,7 @@ export default function RegisterScreen( ) {
 
       </ScrollView>
       </KeyboardAvoidingView>
-      <View style={styles.homeIndicator} />
+      
     </SafeAreaView>
   );
 }

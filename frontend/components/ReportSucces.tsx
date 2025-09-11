@@ -1,22 +1,31 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Check } from "lucide-react-native";
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { ArrowLeft, Check } from "lucide-react-native";
 import Button from "./ui/Button";
 
 export default function ReportSuccessScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={{ fontSize: 24 }}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Nuevo Reporte</Text>
-        <View style={{ width: 28 }} />
-      </View>
+   <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1}}
+      >
+
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <ArrowLeft size={24} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Nuevo Reporte</Text>
+          <View style={{ width: 28 }} />
+        </View>
+
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+        >
 
       {/* Card */}
       <View style={styles.card}>
@@ -35,17 +44,27 @@ export default function ReportSuccessScreen() {
       >
         <Button title="Volver al Inicio" onPress={() => router.push("/welcome")}></Button>
       </TouchableOpacity>
-    </View>
+        </ScrollView>
+         </KeyboardAvoidingView>
+       </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", padding: 16 },
+  safe: {
+    flex: 1,
+    backgroundColor: "#ffffffe2",
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: 18,
+    paddingBottom: 60, // espacio extra abajo
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 24,
+    padding: 50,
   },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   card: {
