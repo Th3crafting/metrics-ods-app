@@ -3,7 +3,6 @@ import { Shield } from "lucide-react-native"; // similar a lucide-react en web
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Button from "./ui/Button";
-import GradientButton from "./ui/GradientButton";
 
 
 export default function LoginScreen(){
@@ -62,7 +61,12 @@ export default function LoginScreen(){
         <TouchableOpacity>
           <Text style={styles.forgot}>¿Olvidó su contraseña?</Text>
         </TouchableOpacity>
-
+          <TouchableOpacity
+            style={styles.buttonOutline}
+            onPress={() => router.push("/register")}
+          >
+            <Text style={styles.buttonOutlineText}>CREAR CUENTA NUEVA</Text>
+          </TouchableOpacity>
        <GradientButton title="ACCESO MODERADOR" onPress={() => router.push("/moderator-dashboard")} icon={<Shield size={18} color="#fff"></Shield>}/>
 
         <TouchableOpacity
@@ -72,7 +76,6 @@ export default function LoginScreen(){
           <Text style={styles.buttonOutlineText}>CREAR CUENTA NUEVA</Text>
         </TouchableOpacity>
       </View>
-
       {/* Home indicator */}
       <View style={styles.homeIndicator} />
     </View>

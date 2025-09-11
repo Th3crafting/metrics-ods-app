@@ -86,6 +86,10 @@ export default function RegisterScreen( ) {
         </View>
       </View>
 
+      </ScrollView>
+      </KeyboardAvoidingView>
+      
+    </SafeAreaView>
       {/* Home indicator */}
       <View style={styles.homeIndicator} />
     </View>

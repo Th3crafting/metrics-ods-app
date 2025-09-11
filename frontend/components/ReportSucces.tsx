@@ -1,5 +1,8 @@
 import { useRouter } from "expo-router";
 import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { ArrowLeft, Check } from "lucide-react-native";
+import Button from "./ui/Button";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Check } from "lucide-react-native";
 
@@ -7,6 +10,24 @@ export default function ReportSuccessScreen() {
   const router = useRouter();
 
   return (
+   <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1}}
+      >
+
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <ArrowLeft size={24} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Nuevo Reporte</Text>
+          <View style={{ width: 28 }} />
+        </View>
+
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+        >
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -36,17 +57,28 @@ export default function ReportSuccessScreen() {
       >
         <Text style={styles.backBtnText}>Volver al inicio</Text>
       </TouchableOpacity>
-    </View>
+        </ScrollView>
+         </KeyboardAvoidingView>
+       </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: "#ffffffe2",
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: 18,
+    paddingBottom: 60, // espacio extra abajo
+  },
   container: { flex: 1, backgroundColor: "#fff", padding: 16 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 24,
+    padding: 50,
   },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   card: {
