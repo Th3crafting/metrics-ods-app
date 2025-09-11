@@ -167,7 +167,18 @@ export default function CreateReportScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  safe: {
+    flex: 1,
+    backgroundColor: "#ffffffe2",
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: 18,
+    paddingBottom: 60, // espacio extra abajo
+  },
+  container: {
+    flex: 1, backgroundColor: "#fff"
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
