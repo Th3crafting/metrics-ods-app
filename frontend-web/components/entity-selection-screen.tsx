@@ -52,21 +52,6 @@ export function EntitySelectionScreen({ onBack, onEntityAssigned, caseData }: En
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Status Bar */}
-      <div className="flex justify-between items-center px-6 py-2 text-sm font-medium bg-white">
-        <span>9:41</span>
-        <div className="flex items-center gap-1">
-          <div className="flex gap-1">
-            <div className="w-1 h-3 bg-black rounded-full"></div>
-            <div className="w-1 h-3 bg-black rounded-full"></div>
-            <div className="w-1 h-3 bg-black rounded-full"></div>
-            <div className="w-1 h-3 bg-gray-300 rounded-full"></div>
-          </div>
-          <div className="w-6 h-3 border border-black rounded-sm">
-            <div className="w-4 h-2 bg-black rounded-sm m-0.5"></div>
-          </div>
-        </div>
-      </div>
 
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">

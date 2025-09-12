@@ -43,6 +43,8 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Input
+              id="register-email"
+              data-cy="register-email"
               type="email"
               placeholder="CORREO"
               value={email}
@@ -54,17 +56,22 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
 
           <div className="relative">
             <Input
+              id="register-password"
+  data-cy="register-password"
               type="password"
               placeholder="CONTRASEÑA"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border-2 border-teal-500 rounded-lg bg-white text-sm placeholder:text-gray-500 placeholder:text-xs placeholder:font-medium"
               required
+             
             />
           </div>
 
           <div>
             <Input
+            id="register-confirm-password"
+              data-cy="register-confirm-password"
               type="password"
               placeholder="CONFIRMAR CONTRASEÑA"
               value={confirmPassword}
@@ -75,6 +82,8 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
           </div>
 
           <Button
+          id="register-submit"
+  data-cy="register-submit"
             type="submit"
             className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 rounded-lg mt-6"
           >
@@ -84,7 +93,8 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
 
         <div className="flex items-start gap-3 mt-4 text-xs text-gray-600">
           <Checkbox
-            id="terms"
+           id="register-terms"
+            data-cy="register-terms"
             checked={acceptTerms}
             onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
             className="mt-0.5 border-green-500 data-[state=checked]:bg-green-500"
