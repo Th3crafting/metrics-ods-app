@@ -6,7 +6,10 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:ci": "start-server-and-test 'npm run dev' http://localhost:3000 cypress:run"
   },
   "dependencies": {
     "20": "^3.1.9",
@@ -68,7 +71,9 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.2.0",
     "postcss": "^8.5",
+    "start-server-and-test": "^2.1.0",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",
     "typescript": "^5"

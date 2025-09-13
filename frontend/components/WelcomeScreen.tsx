@@ -2,12 +2,23 @@
 import { router } from "expo-router";
 import { Menu } from "lucide-react-native";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context"; // 👈 IMPORTANTE
 import Button from "./ui/Button";
 import Sidebar from "./ui/Sidebar";
+import { Video, ResizeMode  } from "expo-av";
 
-
-
+Dimensions.get("window");
 
 export default function WelcomeScreen() {
   const [open, setOpen] = React.useState(false);
@@ -119,83 +130,16 @@ export default function WelcomeScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => setOpen(true)}>
-          <Menu size={28} color="#111" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>NodoVerde</Text>
-        <View style={{ width: 28 }} /> {/* espacio para balancear el header */}
-      </View>
-
-      {/* Sidebar encima de todo */}
-        <Sidebar
-          visible={open}
-          onClose={() => setOpen(false)}
-           onCreateReport={() =>setOpen(false)}
-          onMyReports={() => setOpen(false)}
-          onHowTo={() => setOpen(false)}
-          onSettings={() => setOpen(false)}
-        />
-
-      {/* Contenido Scroll */}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Card Bienvenida */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>¡Bienvenido a NodoVerde!</Text>
-          <Text style={styles.cardSubtitle}>
-            Conectando vecinos para un barrio más sostenible
-          </Text>
-
-          <Button title="+ Crear Nuevo Reporte"  onPress={() => router.push("/report")}/>
-        </View>
-
-        {/* Card Reporta */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Reporta lo que importa</Text>
-          <Text style={styles.cardSubtitle}>
-            ¿Has visto basura acumulada, fugas de agua o ruidos molestos? 
-            Con NodoVerde puedes reportar problemas ambientales en minutos. 
-            Tu voz cuenta para que las autoridades y vecinos actúen rápidamente
-          </Text>
-
-          <Image
-            source={require("../assets/images/welcome1.png")} // 👈 agrega tu imagen aquí
-            style={styles.image}
-            resizeMode="cover"
-            
-           
-          />
-          {/* espacio para balancear el header */}
-          <Text style={styles.cardSubtitle} >
-            
-            ¿Has visto basura acumulada, fugas de agua o ruidos molestos? 
-            Con NodoVerde puedes reportar problemas ambientales en minutos. 
-            Tu voz cuenta para que las autoridades y vecinos actúen rápidamente
-          </Text>
-
-          <Image
-            source={require("../assets/images/welcome1.png")} // 👈 agrega tu imagen aquí
-            style={styles.image}
-            resizeMode="cover"
-          />
-              
-        
-        </View>
-      </ScrollView>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safe: {
     flex: 1,
     backgroundColor: "#ffffffe2",
   },
   scroll: {
     flexGrow: 1,
-    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -237,24 +181,9 @@ const styles = StyleSheet.create({
     color: "#4b5563",
     marginBottom: 12,
   },
-  button: {
-    backgroundColor: "#21BD48", // verde
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 14,
-  },
   image: {
     width: "100%",
-    height: 160,
+    height: 250,
     borderRadius: 8,
     marginTop: 12,
   },

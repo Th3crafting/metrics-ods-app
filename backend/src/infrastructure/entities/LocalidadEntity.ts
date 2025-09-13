@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+
 import { SectorEntity } from "./SectorEntity";
+import { UsuarioEntity } from "./UsuarioEntity";
 
 @Entity("localidades")
 export class LocalidadEntity {
@@ -11,4 +13,7 @@ export class LocalidadEntity {
 
   @OneToMany(() => SectorEntity, (sector) => sector.localidad)
   sectores!: SectorEntity[];
+
+   @OneToMany(() => UsuarioEntity, (usuario) => usuario.localidad)
+  usuarios!: UsuarioEntity[];
 }

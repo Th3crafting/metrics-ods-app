@@ -144,6 +144,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # IDE files
+vscode/
 .vscode/
 .idea/
 *.suo
@@ -154,3 +155,52 @@ vite.config.ts.timestamp-*
 # OS files
 .DS_Store
 Thumbs.db
+*.pem
+
+# Expo
+.expo/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# local env files
+.env*.local
+
+app-example
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+next-env.d.ts

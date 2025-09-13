@@ -2,6 +2,14 @@ import { DataSource } from 'typeorm';
 
 import envs from "./environment-vars";
 
+import { EntidadExternaEntity } from '../entities/EntidadExternaEntity';
+import { LocalidadEntity } from '../entities/LocalidadEntity';
+import { ModeradorEntity } from '../entities/ModeradorEntity';
+import { ReporteEntity } from '../entities/ReporteEntity';
+import { SectorEntity } from '../entities/SectorEntity';
+import { TipoReporteEntity } from '../entities/TipoReporteEntity';
+import { UsuarioEntity } from '../entities/UsuarioEntity';
+
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: envs.DB_HOST,
@@ -12,6 +20,7 @@ export const AppDataSource = new DataSource({
     schema: envs.DB_SCHEMA,
     synchronize: true,
     logging: true,
+    entities:[EntidadExternaEntity, LocalidadEntity, ModeradorEntity, ReporteEntity, SectorEntity, TipoReporteEntity, UsuarioEntity],
 });
 
 export const connectDB = async() => {

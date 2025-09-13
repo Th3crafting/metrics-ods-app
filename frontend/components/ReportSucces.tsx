@@ -3,8 +3,6 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { ArrowLeft, Check } from "lucide-react-native";
 import Button from "./ui/Button";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Check } from "lucide-react-native";
 
 export default function ReportSuccessScreen() {
   const router = useRouter();
@@ -28,15 +26,6 @@ export default function ReportSuccessScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={{ fontSize: 16 }}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Nuevo Reporte</Text>
-        <View style={{ width: 24 }} />
-      </View>
 
       {/* Card */}
       <View style={styles.card}>
@@ -52,10 +41,8 @@ export default function ReportSuccessScreen() {
 
       {/* Botón */}
       <TouchableOpacity
-        style={styles.backBtn}
-        onPress={() => router.push("/welcome")}
       >
-        <Text style={styles.backBtnText}>Volver al inicio</Text>
+        <Button title="Volver al Inicio" onPress={() => router.push("/welcome")}></Button>
       </TouchableOpacity>
         </ScrollView>
          </KeyboardAvoidingView>
@@ -73,7 +60,6 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingBottom: 60, // espacio extra abajo
   },
-  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -82,11 +68,16 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "600" },
   card: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: "#fff",
     padding: 24,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 24,
+     shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3,
   },
   title: { fontSize: 20, fontWeight: "700", color: "#111827", marginVertical: 12 },
   message: { fontSize: 14, textAlign: "center", color: "#374151", marginBottom: 8 },
