@@ -1,4 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
   BookOpen,
@@ -8,7 +9,7 @@ import {
   User,
   X,
 } from "lucide-react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -17,6 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { API_BASE_URL } from "../config/env";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const DRAWER_WIDTH = Math.min(SCREEN_WIDTH * 0.8, 320);
@@ -57,7 +59,32 @@ export default function Sidebar({
   const slideX = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
 
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [activos, setActivos] = useState<number>(0);
+  const [resueltos, setResueltos] = useState<number>(0);
+
   useEffect(() => {
+    const load = async () => {
+      try {
+        const token = await AsyncStorage.getItem("auth_token");
+        if (!token) return;
+
+        const hdrs = { Authorization: `Bearer ${token}` };
+        const u = await fetch(`${API_BASE_URL}/users/me`, { headers: hdrs }).then(r => r.json());
+        setName(u?.name ?? "");
+        setEmail(u?.email ?? "");
+
+        const s = await fetch(`${API_BASE_URL}/reportes/summary`, { headers: hdrs }).then(r => r.json());
+        setActivos(Number(s?.activos ?? 0));
+        setResueltos(Number(s?.resueltos ?? 0));
+      } catch {
+        return;
+      }
+    };
+
+    if (visible) load();
+
     Animated.parallel([
       Animated.timing(slideX, {
         toValue: visible ? 0 : -DRAWER_WIDTH,
@@ -113,8 +140,8 @@ export default function Sidebar({
             <View style={styles.avatar}>
               <User size={32} color="#16a34a" />
             </View>
-            <Text style={styles.name}>Usuario NodoVerde</Text>
-            <Text style={styles.email}>usuario@gmail.com</Text>
+            <Text style={styles.name}>{name || "Usuario"}</Text>
+            <Text style={styles.email}>{email || "-"}</Text>
           </View>
         </LinearGradient>
       </View> 
@@ -122,11 +149,11 @@ export default function Sidebar({
         {/* Stats */}
         <View style={styles.stats}>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>3</Text>
+            <Text style={styles.statNumber}>{activos}</Text>
             <Text style={styles.statLabel}>Reportes activos</Text>
           </View>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>12</Text>
+            <Text style={styles.statNumber}>{resueltos}</Text>
             <Text style={styles.statLabel}>Casos resueltos</Text>
           </View>
         </View>

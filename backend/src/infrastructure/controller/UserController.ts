@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { UserApplication } from "../../application/UserApplication";
 import { User } from "../../domain/user/User";
 import { Validators } from "../config/validations";
+import { AppDataSource } from "../config/con_data_base";
+import { UsuarioEntity } from "../entities/UsuarioEntity";
 
 export class UserController{
     private app: UserApplication;
@@ -34,7 +36,7 @@ export class UserController{
     }
 
     async registerUser(request: Request, response: Response): Promise<Response> {
-    const { name, email, password, direccion, localidadId } = request.body;
+        const { name, email, password, direccion, localidadId } = request.body;
 
         try {
             if (!Validators.name(name))
@@ -151,5 +153,20 @@ export class UserController{
             }
         }
         return response.status(400).json({message:"Error en la petición"});
+    }
+
+    async infoUser(request: Request, response: Response): Promise<Response>{
+        try {
+            const userId = (request as any).user.id;
+            if (!userId) return response.status(401).json({message: "No autorizado"});
+
+            const repo = AppDataSource.getRepository(UsuarioEntity);
+            const user = await repo.findOne({where: {id: userId}});
+            if (!user) return response.status(404).json({message: "Usuario no encontrado"});
+
+            return response.json({id: user.id, name: user.nombre, email: user.email});
+        } catch (e) {
+            return response.status(500).json({message: "Error obteniendo usuario"});
+        }
     }
 }
