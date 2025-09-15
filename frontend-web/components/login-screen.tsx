@@ -107,10 +107,14 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
             <Shield className="w-4 h-4" />
             INICIAR SESIÓN
           </Button>
-
         </form>
-        
-        
+          <Link
+            href="/register"
+            data-cy="login-switch-register"
+            className="block w-full mt-4 border-2 border-green-500 text-green-600 hover:bg-green-50 font-medium py-3 rounded-lg bg-transparent text-center"
+          >
+            CREAR CUENTA NUEVA
+          </Link>
       </div>
 
       {/* Home indicator */}
