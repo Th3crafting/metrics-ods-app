@@ -1,4 +1,4 @@
-import WelcomeScreen from "@/components/WelcomeScreen";
+import WelcomeScreen from "@/src/screens/WelcomeScreen";
 import React from "react";
 import { View } from "react-native";
 

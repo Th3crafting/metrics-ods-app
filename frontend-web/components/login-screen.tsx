@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Shield } from "lucide-react"
+import { Link, Shield } from "lucide-react"
 
 interface LoginScreenProps {
   onLogin: (role?: "user" | "moderator") => void
@@ -19,14 +19,12 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {}
 
-    // ✅ Regex para email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       newErrors.email = "Ingrese un correo válido (ejemplo@dominio.com)"
     }
 
-    // ✅ Regex para contraseña (mín 8, 1 mayúscula, 1 minúscula, 1 número)
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
     if (!passwordRegex.test(password)) {
       newErrors.password =
         "La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número"
@@ -59,10 +57,12 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Input
+              id="login-email"
               type="email"
               placeholder="CORREO"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              data-cy="email"
               className="w-full px-4 py-3 border-2 border-teal-500 rounded-lg bg-white text-sm placeholder:text-gray-500 placeholder:text-xs placeholder:font-medium"
               required
             />
@@ -73,10 +73,12 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
 
           <div>
             <Input
+              id="login-password"
               type="password"
               placeholder="CONTRASEÑA"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              data-cy="password"
               className="w-full px-4 py-3 border-2 border-teal-500 rounded-lg bg-white text-sm placeholder:text-gray-500 placeholder:text-xs placeholder:font-medium"
               required
             />
@@ -86,13 +88,19 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
           </div>
 
           <div className="text-center mt-4">
-            <button type="button" className="text-sm text-gray-600 underline">
+            <button
+              type="button"
+              data-cy="forgot-password"
+              className="text-sm text-gray-600 underline"
+            >
               ¿Olvidó su contraseña?
             </button>
           </div>
 
           <Button
+            id="login-submit"
             type="submit"
+            data-cy="login-submit"
             onClick={handleModeratorLogin}
             className="w-full mt-4 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2"
           >
@@ -100,14 +108,13 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
             INICIAR SESIÓN
           </Button>
         </form>
-
-        <Button
-          onClick={onSwitchToRegister}
-          variant="outline"
-          className="w-full mt-4 border-2 border-green-500 text-green-600 hover:bg-green-50 font-medium py-3 rounded-lg bg-transparent"
-        >
-          CREAR CUENTA NUEVA
-        </Button>
+          <Link
+            href="/register"
+            data-cy="login-switch-register"
+            className="block w-full mt-4 border-2 border-green-500 text-green-600 hover:bg-green-50 font-medium py-3 rounded-lg bg-transparent text-center"
+          >
+            CREAR CUENTA NUEVA
+          </Link>
       </div>
 
       {/* Home indicator */}

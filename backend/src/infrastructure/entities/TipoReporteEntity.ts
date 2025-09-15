@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+
 import { ReporteEntity } from "./ReporteEntity";
 
 @Entity("tipos_reportes")
@@ -9,6 +10,9 @@ export class TipoReporteEntity {
   @Column()
   nombre!: string;
 
-  @OneToMany(() => ReporteEntity, (reporte) => reporte.tipo)
+  @Column()
+  descripcion!: string;
+
+  @OneToMany(() => ReporteEntity, (reporte) => reporte.tipoReporte)
   reportes!: ReporteEntity[];
 }
