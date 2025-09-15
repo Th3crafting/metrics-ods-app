@@ -11,6 +11,15 @@ const reporteAdapter = new ReporteAdapter();
 const reporteApp = new ReporteApplication(reporteAdapter);
 const reporteController = new ReporteController(reporteApp);
 
+router.get("/reportes/summary", authenticateToken, async (request, response) => {
+    try {
+        await reporteController.summary(request, response);
+    } catch (error) {
+        console.error("Error al intentar obtener la información del usuario", error);
+        response.status(400).json({message: "Error al obtener la información del usuario"});
+    }
+})
+
 router.post("/reportes", authenticateToken, async (req, res) => reporteController.createReporte(req, res));
 router.get("/reportes", authenticateToken, async (req, res) => reporteController.getAllReportes(req, res));
 router.get("/reportes/:id", authenticateToken, async (req, res) => reporteController.getReporteById(req, res));

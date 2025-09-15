@@ -11,6 +11,15 @@ const userAdapter = new UsuarioAdapter();
 const userApp = new UserApplication(userAdapter);
 const userController = new UserController(userApp);
 
+router.get("/users/me", authenticateToken, async (request, response) => {
+    try {
+        await userController.infoUser(request, response);
+    } catch (error) {
+        console.error("Error al intentar obtener la información del usuario", error);
+        response.status(400).json({message: "Error al obtener la información del usuario"});
+    }
+});
+
 router.post("/login", async(request, response) => {
     await userController.login(request, response)
 });

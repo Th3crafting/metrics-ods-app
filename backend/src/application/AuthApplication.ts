@@ -4,7 +4,7 @@ const JWT_KEY = process.env.JWT_SECRET || "minimode32caracteresunapalabraquepued
 
 export class AuthApplication {
     static generateToken(payload: object): string {
-        return jwt.sign(payload, JWT_KEY, {expiresIn:"1h"});
+        return jwt.sign(payload, JWT_KEY, {expiresIn:"1d"});
     }
 
     static verifyToken(token: string): any {
