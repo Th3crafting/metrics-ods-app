@@ -1,4 +1,4 @@
-import Sidebar from "@/components/ui/Sidebar";
+import Sidebar from "@/src/ui/Sidebar";
 import { Stack } from "expo-router";
 import React, { useState } from "react";
 import { View } from "react-native";

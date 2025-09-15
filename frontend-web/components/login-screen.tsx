@@ -19,12 +19,12 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {}
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       newErrors.email = "Ingrese un correo válido (ejemplo@dominio.com)"
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
     if (!passwordRegex.test(password)) {
       newErrors.password =
         "La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número"

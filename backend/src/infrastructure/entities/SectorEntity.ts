@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
+
 import { ReporteEntity } from "./ReporteEntity";
 import { LocalidadEntity } from "./LocalidadEntity";
 
