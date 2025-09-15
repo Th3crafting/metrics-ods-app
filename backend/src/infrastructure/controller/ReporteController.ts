@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import { ReporteApplication } from "../../application/ReporteApplication";
 import { Reporte } from "../../domain/reporte/Reporte";
+import { AppDataSource } from "../config/con_data_base";
+import { ReporteEntity } from "../entities/ReporteEntity";
 
 export class ReporteController {
     private app: ReporteApplication;
@@ -91,6 +93,20 @@ export class ReporteController {
 
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
+        }
+    }
+
+    async summary(request: Request, response: Response): Promise<Response> {
+        try {
+            const repo = AppDataSource.getRepository(ReporteEntity);
+            const total = await repo.createQueryBuilder("r").getCount();
+            const resueltos = await repo.createQueryBuilder("r")
+                .where("r.estadoId = :cerradoId", {cerradoId: 4})
+                .getCount();
+            const activos = total - resueltos;
+            return response.json({ activos, resueltos});
+        } catch (error) {
+            return response.status(500).json({message: "Error obteniendo resumen"})
         }
     }
 }

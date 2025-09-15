@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
   Alert,
@@ -14,39 +14,55 @@ import {
   Dimensions
 } from "react-native";
 import Button from "../ui/Button";
+import { API_BASE_URL } from "../config/env";
 
 const { width } = Dimensions.get("window");  
 
-const validateEmail = (email: string) => {
-  const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/; 
-  return emailRegex.test(email);
-}
-const validatePassword = (password: string) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
-  return passwordRegex.test(password);
-};
+const validateEmail = (email: string) => /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email);
+const validatePassword = (password: string) => password.trim().length > 0;
 
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    
-    
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
     if (!validateEmail(email)) {
-      Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+      Alert.alert("Error", "Por favor, ingresa un correo electrónico válido.");
       return;
     }
     if (!validatePassword(password)) {
-      Alert.alert(
-        'Error',
-        'La contraseña debe tener al menos 6 caracteres, incluyendo una letra y un número.'
-      );
+      Alert.alert("Error", "Ingresa tu contraseña.");
       return;
     }
-    Alert.alert("Bienvenido", `Has iniciado sesión con ${email}`);
-    router.push("/welcome");
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const msg = err?.message || (res.status === 401 ? "Credenciales inválidas" : "No se pudo iniciar sesión");
+        throw new Error(msg);
+      }
+
+      const data = await res.json();
+      await AsyncStorage.setItem("auth_token", data.token);
+      // Información de usuario
+      // await AsyncStorage.setItem("auth_user", JSON.stringify(data.user));
+
+      router.replace("/welcome");
+    } catch (e: any) {
+      Alert.alert("Error", e.message ?? "Error inesperado.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -78,7 +94,7 @@ export default function LoginScreen() {
             secureTextEntry
           />
 
-          <Button title="INICIAR SESIÓN" onPress={handleLogin} />
+          <Button title={loading ? "INGRESANDO..." : "INICIAR SESIÓN"} onPress={handleLogin} />
 
           <TouchableOpacity>
             <Text style={styles.forgot}>¿Olvidó su contraseña?{"\n"}</Text>
