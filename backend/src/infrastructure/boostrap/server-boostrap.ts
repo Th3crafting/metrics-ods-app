@@ -14,7 +14,10 @@ export class ServerBoostrap {
         return new Promise((resolve, reject) => {
             const server = http.createServer(this.app);
             const PORT = envs.PORT || 4100;
-            server.listen(PORT)
+            const HOST = (envs.HOST as string) || "0.0.0.0";
+
+            server
+            .listen(PORT, HOST)
             .on("listening", () => {
                 console.log(`Server on http://localhost:${PORT}`);
                 resolve(true);

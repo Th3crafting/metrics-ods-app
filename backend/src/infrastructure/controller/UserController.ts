@@ -34,7 +34,7 @@ export class UserController{
     }
 
     async registerUser(request: Request, response: Response): Promise<Response> {
-    const { name, email, password, direccion, Localidad } = request.body;
+    const { name, email, password, direccion, localidadId } = request.body;
 
         try {
             if (!Validators.name(name))
@@ -48,7 +48,7 @@ export class UserController{
                 message: "La contraseña debe tener entre 8 y 25 caracteres, incluyendo al menos una letra mayúscula, una minúscula, un caracter especial y un número"
             });
 
-            const user: Omit<User, "id"> = { name, email, password, direccion, Localidad};
+            const user: Omit<User, "id"> = { name, email, password, direccion, localidadId};
             const userId = await this.app.createUser(user);
 
             return response.status(201).json({ message: "Usuario creado exitosamente", userId });
@@ -131,7 +131,6 @@ export class UserController{
 
             let { name, email, password, status } = request.body;
 
-            // Validaciones antes de actualizar
             if (name && !Validators.name(name)) 
             return response.status(400).json({message:"El nombre debe tener al menos 3 caracteresponse y solo contener letras",});
 

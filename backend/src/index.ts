@@ -1,7 +1,7 @@
 import app from './infrastructure/web/app';
 
 import { ServerBoostrap } from './infrastructure/boostrap/server-boostrap';
-import { connectDB, AppDataSource } from './infrastructure/config/con_data_base';
+import { AppDataSource } from './infrastructure/config/con_data_base';
 
 const server = new ServerBoostrap(app);
 

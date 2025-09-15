@@ -24,7 +24,7 @@ import {
   Platform,
   Dimensions,
 } from "react-native";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 import Slider from "@react-native-community/slider";
 
 const { width } = Dimensions.get("window");

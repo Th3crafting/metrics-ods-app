@@ -1,5 +1,5 @@
 import React from "react";
-import ReportDetailsScreen from "@/components/ReporDetailsScreen";
+import ReportDetailsScreen from "@/src/screens/ReporDetailsScreen";
 
 export default function ReporteDetail(){
     return <ReportDetailsScreen />

@@ -8,11 +8,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import Checkbox from "expo-checkbox";
+import { Checkbox } from "expo-checkbox";
 import { SafeAreaView } from "react-native-safe-area-context";
-import colombiaData from "../assets/data/colombia.json";
+import colombiaData from "../../assets/data/colombia.json";
 import { Picker } from "@react-native-picker/picker";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 import { ArrowLeft } from "lucide-react-native";
 
 export default function ReportDetailsScreen() {

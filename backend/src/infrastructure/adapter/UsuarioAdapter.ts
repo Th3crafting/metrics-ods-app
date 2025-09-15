@@ -4,6 +4,7 @@ import { User } from "../../domain/user/User";
 import { UserPort } from "../../domain/user/UserPort";
 import { UsuarioEntity } from "../entities/UsuarioEntity";
 import { AppDataSource } from "../config/con_data_base";
+import { LocalidadEntity } from "../entities/LocalidadEntity";
 
 export class UsuarioAdapter implements UserPort {
     private userRepository: Repository<UsuarioEntity>;
@@ -19,8 +20,7 @@ export class UsuarioAdapter implements UserPort {
             email: user.email,
             password: user.password,
             direccion: user.direccion,
-            Localidad: user.localidad
-    
+            localidadId: user.localidad?.id ?? null, 
         };
     }
 
@@ -29,7 +29,8 @@ export class UsuarioAdapter implements UserPort {
         userEntity.nombre = user.name;
         userEntity.email = user.email;
         userEntity.password = user.password;
-        userEntity.direccion= user.direccion;
+        userEntity.direccion = user.direccion;
+        userEntity.localidad = {id: user.localidadId} as LocalidadEntity
         return userEntity;
     }
 
@@ -47,7 +48,7 @@ export class UsuarioAdapter implements UserPort {
             email: user.email ?? existingUser.email,
             password: user.password ?? existingUser.password,
             direccion: user.direccion ?? existingUser.direccion,
-            localidad: user.Localidad ?? existingUser.localidad
+            localidad: user.localidadId ?? existingUser.localidad
         });
         await this.userRepository.save(existingUser);
         return true;

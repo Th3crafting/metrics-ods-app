@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { ArrowLeft, Check } from "lucide-react-native";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 export default function ReportSuccessScreen() {
   const router = useRouter();

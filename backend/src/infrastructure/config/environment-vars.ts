@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 export type ReturnEnvironmentVars = {
     PORT: number;
+    HOST: string
     DB_HOST: string;
     DB_PORT: number;
     DB_USER: string;
@@ -19,6 +20,7 @@ type ValidationEnvironmentVars = {
 function validateEnvVars(vars:NodeJS.ProcessEnv): ValidationEnvironmentVars {
     const envSchema = joi.object({
         PORT: joi.number().required(),
+        HOST: joi.string().required(),
         DB_HOST: joi.string().required(),
         DB_PORT: joi.number().default(3306),
         DB_USER: joi.string().required(),
@@ -26,7 +28,7 @@ function validateEnvVars(vars:NodeJS.ProcessEnv): ValidationEnvironmentVars {
         DB_NAME: joi.string().required(),
         DB_SCHEMA: joi.string().required()
     }).unknown(true);
-    const {error, value} = envSchema.validate(vars);
+    const {error, value} = envSchema.validate(vars, { convert: true });
     return {error, value}
 }
 
@@ -38,6 +40,7 @@ const loadEnvVars = (): ReturnEnvironmentVars => {
     const value = result.value;
     return {
         PORT: value.PORT,
+        HOST: value.HOST,
         DB_HOST: value.DB_HOST,
         DB_PORT: value.DB_PORT,
         DB_USER: value.DB_USER,

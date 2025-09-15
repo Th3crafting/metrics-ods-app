@@ -6,9 +6,10 @@ export interface Reporte {
     latitud: number;
     longitud: number;
     fecha: Date;
-    estado: string; 
+    estadoId?: number | null;
     usuarioId: number;
     tipoReporteId: number;
     sectorId: number;
     EntidadExternaid: number;
+    NivelIncidenciaId?: number | null;
 }

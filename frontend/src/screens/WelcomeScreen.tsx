@@ -14,8 +14,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context"; // 👈 IMPORTANTE
-import Button from "./ui/Button";
-import Sidebar from "./ui/Sidebar";
+import Button from "../ui/Button";
+import Sidebar from "../ui/Sidebar";
 import { Video, ResizeMode  } from "expo-av";
 
 Dimensions.get("window");
@@ -79,7 +79,7 @@ export default function WelcomeScreen() {
               </Text>
 
               <Image
-                source={require("../assets/images/welcome1.png")}
+                source={require("../../assets/images/welcome1.png")}
                 style={styles.image}
                 resizeMode="cover"
               />
@@ -97,7 +97,7 @@ export default function WelcomeScreen() {
                   2. Crear un reporte: Presiona el botón &quot;+ Crear Nuevo Reporte&quot;, completa los datos, adjunta fotos si es necesario y envíalo para notificar a vecinos y autoridades.
                 </Text>
                 <Video
-                  source={require("../assets/video/Creaunreporte.mp4")} // 👈 tu archivo local
+                  source={require("../../assets/video/Creaunreporte.mp4")} // 👈 tu archivo local
                   style={{ 
                     width: "100%", 
                     aspectRatio: 16/9, 

@@ -13,16 +13,16 @@ import {
   ScrollView,
   Dimensions
 } from "react-native";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 const { width } = Dimensions.get("window");  
 
 const validateEmail = (email: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+  const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/; 
   return emailRegex.test(email);
 }
 const validatePassword = (password: string) => {
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
   return passwordRegex.test(password);
 };
 

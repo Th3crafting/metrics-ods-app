@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { ArrowLeft, Camera } from "lucide-react-native";
 import { useRouter } from "expo-router";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 export default function SettingsScreen() {
   const router = useRouter();

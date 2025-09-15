@@ -9,6 +9,8 @@ import { ReporteEntity } from '../entities/ReporteEntity';
 import { SectorEntity } from '../entities/SectorEntity';
 import { TipoReporteEntity } from '../entities/TipoReporteEntity';
 import { UsuarioEntity } from '../entities/UsuarioEntity';
+import { NivelIncidenciaEntity } from '../entities/NivelIncidenciaEntity';
+import { EstadoEntity } from '../entities/EstadosEntity';
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -20,7 +22,17 @@ export const AppDataSource = new DataSource({
     schema: envs.DB_SCHEMA,
     synchronize: true,
     logging: true,
-    entities:[EntidadExternaEntity, LocalidadEntity, ModeradorEntity, ReporteEntity, SectorEntity, TipoReporteEntity, UsuarioEntity],
+    entities:[
+        EntidadExternaEntity,
+        LocalidadEntity,
+        ModeradorEntity,
+        ReporteEntity,
+        SectorEntity,
+        TipoReporteEntity,
+        UsuarioEntity,
+        NivelIncidenciaEntity,
+        EstadoEntity
+    ],
 });
 
 export const connectDB = async() => {

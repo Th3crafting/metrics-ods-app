@@ -1,5 +1,5 @@
 import React from "react";
-import ReportSuccessScreen from "@/components/ReportSucces";
+import ReportSuccessScreen from "@/src/screens/ReportSucces";
 
 export default function ReportSucces(){
     return <ReportSuccessScreen/>

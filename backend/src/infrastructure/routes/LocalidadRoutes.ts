@@ -14,7 +14,7 @@ const localidadController = new LocalidadController(localidadApp);
 router.post("/localidades", authenticateToken, (req, res) => localidadController.createLocalidad(req, res));
 router.put("/localidades/:id", authenticateToken, (req, res) => localidadController.updateLocalidad(req, res));
 router.delete("/localidades/:id", authenticateToken, (req, res) => localidadController.deleteLocalidad(req, res));
-router.get("/localidades", authenticateToken, (req, res) => localidadController.getAllLocalidades(req, res));
+router.get("/localidades", (req, res) => localidadController.getAllLocalidades(req, res));
 router.get("/localidades/:id", authenticateToken, (req, res) => localidadController.getLocalidadById(req, res));
 
 export default router;

@@ -25,7 +25,7 @@ export class ReporteController {
                 latitud,
                 longitud,
                 fecha: fecha ? new Date(fecha) : new Date(),
-                estado: estado || "pendiente",
+                estadoId: estado || "pendiente",
                 usuarioId,
                 tipoReporteId,
                 sectorId,
