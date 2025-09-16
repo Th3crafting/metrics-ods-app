@@ -20,6 +20,15 @@ router.get("/reportes/summary", authenticateToken, async (request, response) => 
     }
 })
 
+router.get("/dashboard", authenticateToken, reporteController.myDashboard.bind(reporteController), async (request, response) => {
+    try {
+        await reporteController.myDashboard(request, response);
+    } catch (error) {
+        console.error("Error al intentar obtener la información del dashboard", error);
+        response.status(400).json({message: "Error al obtener el dashboard"});
+    }
+})
+
 router.post("/reportes", authenticateToken, async (req, res) => reporteController.createReporte(req, res));
 router.get("/reportes", authenticateToken, async (req, res) => reporteController.getAllReportes(req, res));
 router.get("/reportes/:id", authenticateToken, async (req, res) => reporteController.getReporteById(req, res));
