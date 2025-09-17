@@ -4,16 +4,16 @@ import { ReporteEntity } from "./ReporteEntity";
 
 @Entity("entidades_externas")
 export class EntidadExternaEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "int" })
     id!: number;
 
-    @Column()
+    @Column({ type: "character varying" })
     nombre!: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "character varying", nullable: true })
     contacto!: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "character varying", nullable: true })
     telefono!: string;
 
     @OneToMany(() => ReporteEntity, reporte => reporte.entidadExterna)

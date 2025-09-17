@@ -5,10 +5,10 @@ import { LocalidadEntity } from "./LocalidadEntity";
 
 @Entity("sectores")
 export class SectorEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id!: number;
 
-  @Column()
+  @Column({ type: "character varying" })
   nombre!: string;
 
   @ManyToOne(() => LocalidadEntity, (localidad) => localidad.sectores)

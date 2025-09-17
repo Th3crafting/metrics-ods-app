@@ -4,13 +4,13 @@ import { ReporteEntity } from './ReporteEntity';
 
 @Entity("nivel_incidencia")
 export class NivelIncidenciaEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id!: number;
 
-  @Column()
+  @Column({ type: "int" })
   nivel!: number;
 
-  @Column()
+  @Column({ type: "character varying", nullable: true })
   descripcion!: string;
 
   @OneToMany(() => ReporteEntity, (reporte) => reporte.nivelIncidencia)
