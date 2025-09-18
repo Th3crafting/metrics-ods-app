@@ -28,7 +28,7 @@ export class ReporteApplication {
             this.port.existsUsuario(input.usuarioId),
             this.port.existsTipoReporte(input.tipoReporteId),
             this.port.existsSector(input.sectorId),
-            this.port.existsNivelIncidencia(input.nivelIncidenciaId as number),
+            this.port.existsNivelIncidencia(input.nivelIncidenciaId),
         ]);
 
         if (!hasUser) throw new Error("El usuario no existe.");
@@ -59,7 +59,7 @@ export class ReporteApplication {
 
         const updates: Partial<Reporte> = {};
         if (patch.estadoId !== undefined) {
-            if (!Number.isInteger(patch.estadoId) || (patch.estadoId as number) <= 0) {
+            if (!Number.isInteger(patch.estadoId) || (patch.estadoId) <= 0) {
             throw new Error("estadoId inválido.");
             }
             updates.estadoId = patch.estadoId;
@@ -68,10 +68,10 @@ export class ReporteApplication {
         if (patch.entidadExternaId === null) {
             updates.entidadExternaId = null;
         } else if (patch.entidadExternaId !== undefined) {
-            if (!Number.isInteger(patch.entidadExternaId) || (patch.entidadExternaId as number) <= 0) {
+            if (!Number.isInteger(patch.entidadExternaId) || (patch.entidadExternaId) <= 0) {
             throw new Error("entidadExternaId inválido.");
             }
-            const exists = await this.port.existsEntidadExterna(patch.entidadExternaId as number);
+            const exists = await this.port.existsEntidadExterna(patch.entidadExternaId);
             if (!exists) throw new Error("La entidad externa no existe.");
             updates.entidadExternaId = patch.entidadExternaId;
         }

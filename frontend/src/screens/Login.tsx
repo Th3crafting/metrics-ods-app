@@ -54,8 +54,6 @@ export default function LoginScreen() {
 
       const data = await res.json();
       await AsyncStorage.setItem("auth_token", data.token);
-      // Información de usuario
-      // await AsyncStorage.setItem("auth_user", JSON.stringify(data.user));
 
       router.replace("/welcome");
     } catch (e: any) {

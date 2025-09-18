@@ -2,12 +2,35 @@ import { Request, Response } from "express";
 
 import { ModeradorApplication } from "../../application/ModeradorApplication";
 import { Moderador } from "../../domain/moderador/Moderador";
+import { Validators } from "../config/validations";
 
 export class ModeradorController {
     private app: ModeradorApplication;
 
     constructor(app: ModeradorApplication) {
         this.app = app;
+    }
+
+    async login(req: Request, res: Response): Promise<string | Response> {
+        try {
+            const { email, password } = req.body;
+            if (!email || !password)
+            return res.status(400).json({ message: "Email y contraseña son requeridos" });
+
+            if (!Validators.email(email))
+            return res.status(400).json({ message: "Correo electrónico no válido" });
+
+            if (!Validators.password(password))
+            return res.status(400).json({
+            message:
+                "La contraseña debe tener al menos 6 caracteres y máximo 25, incluyendo al menos una letra y un número",
+            });
+
+            const token = await this.app.login(email, password);
+            return res.status(200).json({ token });
+        } catch (error) {
+            return res.status(401).json({ message: "Credenciales inválidas" });
+        }
     }
 
     async createModerador(req: Request, res: Response): Promise<Response> {
@@ -18,7 +41,13 @@ export class ModeradorController {
                 return res.status(400).json({ message: "Faltan campos obligatorios" });
             }
 
-            const moderador: Omit<Moderador, "id"> = { nombre, email, password };
+            const moderador: Omit<Moderador, "id"> = {
+                nombre,
+                email,
+                password,
+                isAdmin: false,
+            };
+
             const id = await this.app.createModerador(moderador);
 
             return res.status(201).json({ message: "Moderador creado", id });
