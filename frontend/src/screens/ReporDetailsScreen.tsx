@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
 import Button from "../ui/Button";
 import { ArrowLeft } from "lucide-react-native";
-import colombiaData from "../../assets/data/colombia.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../config/env";
 
@@ -22,7 +21,7 @@ async function getToken(): Promise<string | null> {
   return await AsyncStorage.getItem("auth_token");
 }
 
-type Sector = { id: number; nombre: string };
+type Localidad = { id: number; nombre: string; sectorId?: number; sectorNombre?: string };
 
 export default function ReportDetailsScreen() {
   const router = useRouter();
@@ -35,13 +34,12 @@ export default function ReportDetailsScreen() {
   }>();
 
   const [direccion, setDireccion] = useState("");
-  const [departamento, setDepartamento] = useState("");
-  const [municipio, setMunicipio] = useState("");
-  const [localidad, setLocalidad] = useState("");
+  const [localidadId, setLocalidadId] = useState<number | "">("");
   const [sectorId, setSectorId] = useState<number | null>(null);
+  const [sectorNombre, setSectorNombre] = useState<string>("");
+  const [localidades, setLocalidades] = useState<Localidad[]>([]);
   const [accepted, setAccepted] = useState(false);
 
-  const [sectores, setSectores] = useState<Sector[]>([]);
   useEffect(() => {
     (async () => {
       try {
@@ -49,32 +47,44 @@ export default function ReportDetailsScreen() {
         const headers: Record<string, string> = {};
         if (token) headers.Authorization = `Bearer ${token}`;
         
-        const r = await fetch(`${API_BASE_URL}/sectores`, { headers });
-        const data: Sector[] = r.ok
-          ? await r.json()
-          : [
-              { id: 1, nombre: "Sector Norte" },
-              { id: 2, nombre: "Sector Centro" },
-              { id: 3, nombre: "Sector Sur" },
-              { id: 4, nombre: "Sector Occidente" },
-              { id: 5, nombre: "Sector Oriente" },
-            ];
-        setSectores(data);
+        const r = await fetch(`${API_BASE_URL}/localidades`, { headers });
+        const locs: Localidad[] = r.ok ? await r.json() : [];
+        setLocalidades(locs);
       } catch {
-        setSectores([
-          { id: 1, nombre: "Sector Norte" },
-          { id: 2, nombre: "Sector Centro" },
-          { id: 3, nombre: "Sector Sur" },
-          { id: 4, nombre: "Sector Occidente" },
-          { id: 5, nombre: "Sector Oriente" },
-        ]);
+        setLocalidades([]);
       }
     })();
   }, []);
 
-  const departamentos = colombiaData.departamentos.map((d) => d.nombre);
-  const municipios = colombiaData.departamentos.find((d) => d.nombre === departamento)?.municipios || [];
-  const localidades = municipios.find((m) => m.nombre === municipio)?.localidades || [];
+  const onChangeLocalidad = async (value: number | "") => {
+    setLocalidadId(value);
+    if(!value) {
+      setSectorId(null);
+      setSectorNombre("");
+      return;
+    }
+
+    const loc = localidades.find(l => l.id === value);
+    if (loc?.sectorId) {
+      setSectorId(loc.sectorId);
+      if (loc.sectorNombre) setSectorNombre( loc.sectorNombre);
+      else {
+        try {
+          const token = await getToken();
+          const headers: Record<string, string> = {};
+          if (token) headers.Authorization = `Bearer ${token}`;
+          const rs = await fetch(`${API_BASE_URL}/sectores/${loc.sectorId}`, { headers });
+          if (rs.ok) {
+            const s = await rs.json();
+            setSectorNombre(s?.nombre ?? "");
+          } else setSectorNombre("");
+        } catch { setSectorNombre(""); }
+      }
+    } else {
+      setSectorId(null);
+      setSectorNombre("");
+    }
+  };
 
   const titulo = useMemo(() => {
     const tipo = params.tipoNombre || "Reporte";
@@ -148,53 +158,31 @@ export default function ReportDetailsScreen() {
           style={styles.input}
         />
 
-        {/* Sector (desde BD) */}
+        {/* Localidad UI existente */}
+        <Text style={styles.label}>Localidad</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={localidadId}
+            onValueChange={onChangeLocalidad}
+            style={styles.picker}
+          >
+            <Picker.Item label="Seleccione una localidad" value="" />
+            {localidades.map((l) => (
+              <Picker.Item key={l.id} label={l.nombre} value={l.id} />
+            ))}
+          </Picker>
+        </View>
+
+        {/* Sector (auto, no editable) */}
         <Text style={styles.label}>
           Sector <Text style={{ color: "red" }}>*</Text>
         </Text>
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={sectorId ?? ""}
-            onValueChange={(v) => setSectorId(v ? Number(v) : null)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Seleccione un sector" value="" />
-            {sectores.map((s) => (
-              <Picker.Item key={s.id} label={s.nombre} value={s.id} />
-            ))}
-          </Picker>
-        </View>
-
-        {/* (Opcional) Departamento/Municipio/Localidad UI existente */}
-        <Text style={styles.label}>Departamento</Text>
-        <View style={styles.pickerWrapper}>
-          <Picker selectedValue={departamento} onValueChange={setDepartamento} style={styles.picker}>
-            <Picker.Item label="Seleccione un departamento" value="" />
-            {departamentos.map((dep) => (
-              <Picker.Item key={dep} label={dep} value={dep} />
-            ))}
-          </Picker>
-        </View>
-
-        <Text style={styles.label}>Municipio</Text>
-        <View style={styles.pickerWrapper}>
-          <Picker selectedValue={municipio} onValueChange={setMunicipio} style={styles.picker}>
-            <Picker.Item label="Seleccione un municipio" value="" />
-            {municipios.map((mun) => (
-              <Picker.Item key={mun.nombre} label={mun.nombre} value={mun.nombre} />
-            ))}
-          </Picker>
-        </View>
-
-        <Text style={styles.label}>Localidad</Text>
-        <View style={styles.pickerWrapper}>
-          <Picker selectedValue={localidad} onValueChange={setLocalidad} style={styles.picker}>
-            <Picker.Item label="Seleccione una localidad" value="" />
-            {localidades.map((loc) => (
-              <Picker.Item key={loc} label={loc} value={loc} />
-            ))}
-          </Picker>
-        </View>
+        <TextInput
+          value={sectorNombre || (sectorId ? `#${sectorId}` : "")}
+          editable={false}
+          placeholder="Se autocompleta al elegir la localidad"
+          style={[styles.input, { backgroundColor: "#f3f4f6" }]}
+        />
 
         {/* Términos */}
         <View style={styles.termsRow}>

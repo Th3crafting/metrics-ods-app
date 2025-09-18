@@ -70,14 +70,4 @@ export class SectorController {
             res.status(500).json({ message: "Error obteniendo sector" });
         }
     }
-
-    async getSectoresByLocalidad(req: Request, res: Response): Promise<void> {
-        try {
-            const sectores = await this.sectorApp.getSectoresByLocalidad(Number(req.params.localidadId));
-            res.json(sectores);
-        } catch (error) {
-            console.error("Error obteniendo sectores por localidad:", error);
-            res.status(500).json({ message: "Error obteniendo sectores por localidad" });
-        }
-    }
 }

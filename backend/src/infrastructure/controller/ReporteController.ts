@@ -5,7 +5,7 @@ import { NewReporte, Reporte } from "../../domain/reporte/Reporte";
 import { AppDataSource } from "../config/con_data_base";
 import { ReporteEntity } from "../entities/ReporteEntity";
 import { ESTADOS } from "../constants/estados";
-import { DashboardResponse } from "../interfaces/MyDashboard";
+import { DashboardResponse, DashboardReportItem } from "../interfaces/MyDashboard";
 
 type RequestWithUser = Request & { user?: { id: number; email?: string } };
 
@@ -58,7 +58,7 @@ export class ReporteController {
         } catch (err: any) {
             return res.status(400).json({ message: err?.message ?? "Error creando el reporte" });
         }
-        };
+    };
 
     updateReporte = async (req: RequestWithUser, res: Response) => {
         try {
@@ -183,6 +183,7 @@ export class ReporteController {
 
             const baseQB = repo
                 .createQueryBuilder("r")
+                .leftJoinAndSelect("r.tipoReporte", "tipoReporte")
                 .where("r.usuarioId = :userId", {userId});
 
             const now = new Date();
@@ -235,15 +236,31 @@ export class ReporteController {
                 listFor(ESTADOS.RECHAZADO),
             ]);
 
+            const toCard = (r: ReporteEntity): DashboardReportItem => ({
+                id: r.id,
+                titulo: r.titulo ?? "",
+                descripcion: r.descripcion ?? null,
+                direccion: r.direccion ?? "",
+                fecha: r.fecha instanceof Date ? r.fecha.toISOString() : String(r.fecha),
+                tipoReporteId: r.tipoReporte?.id ?? 0,
+                tipoReporteNombre: r.tipoReporte.nombre ?? "",
+            });
+
+            const abiertosDTO   = abiertos.map(toCard);
+            const pendientesDTO = pendientes.map(toCard);
+            const enRevisionDTO = enRevision.map(toCard);
+            const cerradosDTO   = cerrados.map(toCard);
+            const rechazadosDTO = rechazados.map(toCard);
+
             const payload: DashboardResponse = {
                 totals: { total, thisMonth},
                 byStatus,
                 lists: {
-                    Abierto: abiertos,
-                    Pendiente: pendientes,
-                    EnRevision: enRevision,
-                    Cerrado: cerrados,
-                    Rechazado: rechazados,
+                    Abierto: abiertosDTO,
+                    Pendiente: pendientesDTO,
+                    EnRevision: enRevisionDTO,
+                    Cerrado: cerradosDTO,
+                    Rechazado: rechazadosDTO,
                 },
             };
 

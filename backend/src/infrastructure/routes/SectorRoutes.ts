@@ -16,6 +16,5 @@ router.put("/sectores/:id", authenticateToken, (req, res) => sectorController.up
 router.delete("/sectores/:id", authenticateToken, (req, res) => sectorController.deleteSector(req, res));
 router.get("/sectores", authenticateToken, (req, res) => sectorController.getAllSectores(req, res));
 router.get("/sectores/:id", authenticateToken, (req, res) => sectorController.getSectorById(req, res));
-router.get("/sectores/localidad/:localidadId", authenticateToken, (req, res) => sectorController.getSectoresByLocalidad(req, res));
 
 export default router;

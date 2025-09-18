@@ -34,7 +34,6 @@ export class ReporteAdapter implements ReportePort {
     };
   }
 
-
   private toEntity(reporte: Omit<Reporte, "id">): ReporteEntity {
     const reporteEntity = new ReporteEntity();
     reporteEntity.titulo = reporte.titulo;
