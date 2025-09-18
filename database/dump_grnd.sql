@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict 7hRfbRuCASyiBcK7R9Er9dIqA29kf7jSCScbIqJgBPhF1aQI75sDFCkF7ef6Cmt
+\restrict W830kiI5GaSKKZeJRzFeWveQQ0ahYMRuXtlbsgnKT6ZnLKRe21Vrc48k2PdZQua
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
--- Started on 2025-09-18 03:35:41
+-- Started on 2025-09-18 12:32:17
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -67,7 +67,7 @@ CREATE SEQUENCE grnd.entidades_externas_id_seq
 ALTER SEQUENCE grnd.entidades_externas_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4956 (class 0 OID 0)
+-- TOC entry 4957 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: entidades_externas_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -105,7 +105,7 @@ CREATE SEQUENCE grnd.estados_id_seq
 ALTER SEQUENCE grnd.estados_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4957 (class 0 OID 0)
+-- TOC entry 4958 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: estados_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -144,7 +144,7 @@ CREATE SEQUENCE grnd.localidades_id_seq
 ALTER SEQUENCE grnd.localidades_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4958 (class 0 OID 0)
+-- TOC entry 4959 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: localidades_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -174,7 +174,8 @@ CREATE TABLE grnd.moderadores (
     id integer NOT NULL,
     nombre character varying NOT NULL,
     email character varying NOT NULL,
-    password character varying NOT NULL
+    password character varying NOT NULL,
+    "isAdmin" boolean DEFAULT false NOT NULL
 );
 
 
@@ -197,7 +198,7 @@ CREATE SEQUENCE grnd.moderadores_id_seq
 ALTER SEQUENCE grnd.moderadores_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4959 (class 0 OID 0)
+-- TOC entry 4960 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: moderadores_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -236,7 +237,7 @@ CREATE SEQUENCE grnd.nivel_incidencia_id_seq
 ALTER SEQUENCE grnd.nivel_incidencia_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4960 (class 0 OID 0)
+-- TOC entry 4961 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: nivel_incidencia_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -283,7 +284,7 @@ CREATE SEQUENCE grnd.reportes_id_seq
 ALTER SEQUENCE grnd.reportes_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4961 (class 0 OID 0)
+-- TOC entry 4962 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: reportes_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -321,7 +322,7 @@ CREATE SEQUENCE grnd.sectores_id_seq
 ALTER SEQUENCE grnd.sectores_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4962 (class 0 OID 0)
+-- TOC entry 4963 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: sectores_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -360,7 +361,7 @@ CREATE SEQUENCE grnd.tipos_reportes_id_seq
 ALTER SEQUENCE grnd.tipos_reportes_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4963 (class 0 OID 0)
+-- TOC entry 4964 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: tipos_reportes_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -402,7 +403,7 @@ CREATE SEQUENCE grnd.usuarios_id_seq
 ALTER SEQUENCE grnd.usuarios_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4964 (class 0 OID 0)
+-- TOC entry 4965 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: usuarios_id_seq; Type: SEQUENCE OWNED BY; Schema: grnd; Owner: postgres
 --
@@ -443,7 +444,7 @@ ALTER TABLE ONLY grnd.moderadores ALTER COLUMN id SET DEFAULT nextval('grnd.mode
 
 
 --
--- TOC entry 4743 (class 2604 OID 16922)
+-- TOC entry 4744 (class 2604 OID 16922)
 -- Name: nivel_incidencia id; Type: DEFAULT; Schema: grnd; Owner: postgres
 --
 
@@ -451,7 +452,7 @@ ALTER TABLE ONLY grnd.nivel_incidencia ALTER COLUMN id SET DEFAULT nextval('grnd
 
 
 --
--- TOC entry 4744 (class 2604 OID 16923)
+-- TOC entry 4745 (class 2604 OID 16923)
 -- Name: reportes id; Type: DEFAULT; Schema: grnd; Owner: postgres
 --
 
@@ -459,7 +460,7 @@ ALTER TABLE ONLY grnd.reportes ALTER COLUMN id SET DEFAULT nextval('grnd.reporte
 
 
 --
--- TOC entry 4746 (class 2604 OID 16924)
+-- TOC entry 4747 (class 2604 OID 16924)
 -- Name: sectores id; Type: DEFAULT; Schema: grnd; Owner: postgres
 --
 
@@ -467,7 +468,7 @@ ALTER TABLE ONLY grnd.sectores ALTER COLUMN id SET DEFAULT nextval('grnd.sectore
 
 
 --
--- TOC entry 4747 (class 2604 OID 16925)
+-- TOC entry 4748 (class 2604 OID 16925)
 -- Name: tipos_reportes id; Type: DEFAULT; Schema: grnd; Owner: postgres
 --
 
@@ -475,7 +476,7 @@ ALTER TABLE ONLY grnd.tipos_reportes ALTER COLUMN id SET DEFAULT nextval('grnd.t
 
 
 --
--- TOC entry 4748 (class 2604 OID 16926)
+-- TOC entry 4749 (class 2604 OID 16926)
 -- Name: usuarios id; Type: DEFAULT; Schema: grnd; Owner: postgres
 --
 
@@ -483,7 +484,7 @@ ALTER TABLE ONLY grnd.usuarios ALTER COLUMN id SET DEFAULT nextval('grnd.usuario
 
 
 --
--- TOC entry 4932 (class 0 OID 16857)
+-- TOC entry 4933 (class 0 OID 16857)
 -- Dependencies: 217
 -- Data for Name: entidades_externas; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -499,7 +500,7 @@ COPY grnd.entidades_externas (id, nombre, contacto, telefono) FROM stdin;
 
 
 --
--- TOC entry 4934 (class 0 OID 16863)
+-- TOC entry 4935 (class 0 OID 16863)
 -- Dependencies: 219
 -- Data for Name: estados; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -514,7 +515,7 @@ COPY grnd.estados (id, nombre) FROM stdin;
 
 
 --
--- TOC entry 4936 (class 0 OID 16869)
+-- TOC entry 4937 (class 0 OID 16869)
 -- Dependencies: 221
 -- Data for Name: localidades; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -544,7 +545,7 @@ COPY grnd.localidades (id, nombre, sector_id) FROM stdin;
 
 
 --
--- TOC entry 4938 (class 0 OID 16875)
+-- TOC entry 4939 (class 0 OID 16875)
 -- Dependencies: 223
 -- Data for Name: moderador_sector; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -564,20 +565,20 @@ COPY grnd.moderador_sector (moderador_id, sector_id) FROM stdin;
 
 
 --
--- TOC entry 4939 (class 0 OID 16878)
+-- TOC entry 4940 (class 0 OID 16878)
 -- Dependencies: 224
 -- Data for Name: moderadores; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
 
-COPY grnd.moderadores (id, nombre, email, password) FROM stdin;
-1	Dillan Real	drealnieto@gmail.com	$2b$12$g7EcKX5w9rMjiEcuzVWZB.UDw4eoj0RycbAmG4wD.HENsrV31Ybwi
-2	Sara Otero	sotero@gmail.com	$2b$12$Dmhm3MKG1wCBvhADhKdAO..yVguIVjUVdkDIGV7j9nbacBRh/MTce
-3	Julian Moreno	jmoreno@prueba.com	$2b$12$GcvPzWHfqTlwitQE25PcIerH31iezy3N5vTnuOpk1p/CxnysQzDTy
+COPY grnd.moderadores (id, nombre, email, password, "isAdmin") FROM stdin;
+2	Sara Otero	sotero@gmail.com	$2b$12$Dmhm3MKG1wCBvhADhKdAO..yVguIVjUVdkDIGV7j9nbacBRh/MTce	f
+3	Julian Moreno	jmoreno@prueba.com	$2b$12$GcvPzWHfqTlwitQE25PcIerH31iezy3N5vTnuOpk1p/CxnysQzDTy	f
+1	Dillan Real	drealnieto@gmail.com	$2b$12$g7EcKX5w9rMjiEcuzVWZB.UDw4eoj0RycbAmG4wD.HENsrV31Ybwi	t
 \.
 
 
 --
--- TOC entry 4941 (class 0 OID 16884)
+-- TOC entry 4942 (class 0 OID 16884)
 -- Dependencies: 226
 -- Data for Name: nivel_incidencia; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -590,7 +591,7 @@ COPY grnd.nivel_incidencia (id, nivel, descripcion) FROM stdin;
 
 
 --
--- TOC entry 4943 (class 0 OID 16890)
+-- TOC entry 4944 (class 0 OID 16890)
 -- Dependencies: 228
 -- Data for Name: reportes; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -612,7 +613,7 @@ COPY grnd.reportes (id, descripcion, fecha, entidad_externa_id, titulo, direccio
 
 
 --
--- TOC entry 4945 (class 0 OID 16900)
+-- TOC entry 4946 (class 0 OID 16900)
 -- Dependencies: 230
 -- Data for Name: sectores; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -627,7 +628,7 @@ COPY grnd.sectores (id, nombre) FROM stdin;
 
 
 --
--- TOC entry 4947 (class 0 OID 16906)
+-- TOC entry 4948 (class 0 OID 16906)
 -- Dependencies: 232
 -- Data for Name: tipos_reportes; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -642,7 +643,7 @@ COPY grnd.tipos_reportes (id, nombre, descripcion) FROM stdin;
 
 
 --
--- TOC entry 4949 (class 0 OID 16912)
+-- TOC entry 4950 (class 0 OID 16912)
 -- Dependencies: 234
 -- Data for Name: usuarios; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
@@ -657,7 +658,7 @@ COPY grnd.usuarios (id, localidad_id, nombre, email, password, direccion) FROM s
 
 
 --
--- TOC entry 4965 (class 0 OID 0)
+-- TOC entry 4966 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: entidades_externas_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -666,7 +667,7 @@ SELECT pg_catalog.setval('grnd.entidades_externas_id_seq', 6, true);
 
 
 --
--- TOC entry 4966 (class 0 OID 0)
+-- TOC entry 4967 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: estados_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -675,7 +676,7 @@ SELECT pg_catalog.setval('grnd.estados_id_seq', 5, true);
 
 
 --
--- TOC entry 4967 (class 0 OID 0)
+-- TOC entry 4968 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: localidades_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -684,7 +685,7 @@ SELECT pg_catalog.setval('grnd.localidades_id_seq', 1, false);
 
 
 --
--- TOC entry 4968 (class 0 OID 0)
+-- TOC entry 4969 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: moderadores_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -693,7 +694,7 @@ SELECT pg_catalog.setval('grnd.moderadores_id_seq', 3, true);
 
 
 --
--- TOC entry 4969 (class 0 OID 0)
+-- TOC entry 4970 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: nivel_incidencia_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -702,7 +703,7 @@ SELECT pg_catalog.setval('grnd.nivel_incidencia_id_seq', 3, true);
 
 
 --
--- TOC entry 4970 (class 0 OID 0)
+-- TOC entry 4971 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: reportes_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -711,7 +712,7 @@ SELECT pg_catalog.setval('grnd.reportes_id_seq', 23, true);
 
 
 --
--- TOC entry 4971 (class 0 OID 0)
+-- TOC entry 4972 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: sectores_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -720,7 +721,7 @@ SELECT pg_catalog.setval('grnd.sectores_id_seq', 5, true);
 
 
 --
--- TOC entry 4972 (class 0 OID 0)
+-- TOC entry 4973 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: tipos_reportes_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -729,7 +730,7 @@ SELECT pg_catalog.setval('grnd.tipos_reportes_id_seq', 6, true);
 
 
 --
--- TOC entry 4973 (class 0 OID 0)
+-- TOC entry 4974 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
@@ -738,7 +739,7 @@ SELECT pg_catalog.setval('grnd.usuarios_id_seq', 5, true);
 
 
 --
--- TOC entry 4750 (class 2606 OID 16928)
+-- TOC entry 4751 (class 2606 OID 16928)
 -- Name: entidades_externas entidades_externas_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -747,7 +748,7 @@ ALTER TABLE ONLY grnd.entidades_externas
 
 
 --
--- TOC entry 4752 (class 2606 OID 16930)
+-- TOC entry 4753 (class 2606 OID 16930)
 -- Name: estados estados_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -756,7 +757,7 @@ ALTER TABLE ONLY grnd.estados
 
 
 --
--- TOC entry 4754 (class 2606 OID 16932)
+-- TOC entry 4755 (class 2606 OID 16932)
 -- Name: localidades localidades_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -765,7 +766,7 @@ ALTER TABLE ONLY grnd.localidades
 
 
 --
--- TOC entry 4758 (class 2606 OID 16934)
+-- TOC entry 4759 (class 2606 OID 16934)
 -- Name: moderador_sector moderador_sector_pk; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -774,7 +775,7 @@ ALTER TABLE ONLY grnd.moderador_sector
 
 
 --
--- TOC entry 4760 (class 2606 OID 16936)
+-- TOC entry 4761 (class 2606 OID 16936)
 -- Name: moderadores moderadores_email_key; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -783,7 +784,7 @@ ALTER TABLE ONLY grnd.moderadores
 
 
 --
--- TOC entry 4762 (class 2606 OID 16938)
+-- TOC entry 4763 (class 2606 OID 16938)
 -- Name: moderadores moderadores_email_uk; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -792,7 +793,7 @@ ALTER TABLE ONLY grnd.moderadores
 
 
 --
--- TOC entry 4764 (class 2606 OID 16940)
+-- TOC entry 4765 (class 2606 OID 16940)
 -- Name: moderadores moderadores_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -801,7 +802,7 @@ ALTER TABLE ONLY grnd.moderadores
 
 
 --
--- TOC entry 4766 (class 2606 OID 16942)
+-- TOC entry 4767 (class 2606 OID 16942)
 -- Name: nivel_incidencia nivel_incidencia_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -810,7 +811,7 @@ ALTER TABLE ONLY grnd.nivel_incidencia
 
 
 --
--- TOC entry 4768 (class 2606 OID 16944)
+-- TOC entry 4769 (class 2606 OID 16944)
 -- Name: reportes reportes_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -819,7 +820,7 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4770 (class 2606 OID 16948)
+-- TOC entry 4771 (class 2606 OID 16948)
 -- Name: sectores sectores_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -828,7 +829,7 @@ ALTER TABLE ONLY grnd.sectores
 
 
 --
--- TOC entry 4772 (class 2606 OID 16950)
+-- TOC entry 4773 (class 2606 OID 16950)
 -- Name: tipos_reportes tipos_reportes_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -837,7 +838,7 @@ ALTER TABLE ONLY grnd.tipos_reportes
 
 
 --
--- TOC entry 4774 (class 2606 OID 16952)
+-- TOC entry 4775 (class 2606 OID 16952)
 -- Name: usuarios usuarios_email_key; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -846,7 +847,7 @@ ALTER TABLE ONLY grnd.usuarios
 
 
 --
--- TOC entry 4776 (class 2606 OID 16954)
+-- TOC entry 4777 (class 2606 OID 16954)
 -- Name: usuarios usuarios_pkey; Type: CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -855,23 +856,23 @@ ALTER TABLE ONLY grnd.usuarios
 
 
 --
--- TOC entry 4755 (class 1259 OID 16955)
--- Name: idx_moderador_sector_moderador; Type: INDEX; Schema: grnd; Owner: postgres
+-- TOC entry 4756 (class 1259 OID 17030)
+-- Name: IDX_681f81c01645399049e6e15fef; Type: INDEX; Schema: grnd; Owner: postgres
 --
 
-CREATE INDEX idx_moderador_sector_moderador ON grnd.moderador_sector USING btree (moderador_id);
-
-
---
--- TOC entry 4756 (class 1259 OID 16956)
--- Name: idx_moderador_sector_sector; Type: INDEX; Schema: grnd; Owner: postgres
---
-
-CREATE INDEX idx_moderador_sector_sector ON grnd.moderador_sector USING btree (sector_id);
+CREATE INDEX "IDX_681f81c01645399049e6e15fef" ON grnd.moderador_sector USING btree (sector_id);
 
 
 --
--- TOC entry 4780 (class 2606 OID 16958)
+-- TOC entry 4757 (class 1259 OID 17029)
+-- Name: IDX_f194f5d9084a050e699c82593e; Type: INDEX; Schema: grnd; Owner: postgres
+--
+
+CREATE INDEX "IDX_f194f5d9084a050e699c82593e" ON grnd.moderador_sector USING btree (moderador_id);
+
+
+--
+-- TOC entry 4781 (class 2606 OID 16958)
 -- Name: reportes FK_0133a02f6c44ee667565d9e2170; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -880,7 +881,7 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4781 (class 2606 OID 16963)
+-- TOC entry 4782 (class 2606 OID 16963)
 -- Name: reportes FK_2ae1b5c9642c262f65629c3174a; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -889,7 +890,7 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4782 (class 2606 OID 16968)
+-- TOC entry 4783 (class 2606 OID 16968)
 -- Name: reportes FK_56c224dac3bbbe85a94ed429551; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -898,7 +899,16 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4783 (class 2606 OID 16973)
+-- TOC entry 4779 (class 2606 OID 17036)
+-- Name: moderador_sector FK_681f81c01645399049e6e15fef8; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
+--
+
+ALTER TABLE ONLY grnd.moderador_sector
+    ADD CONSTRAINT "FK_681f81c01645399049e6e15fef8" FOREIGN KEY (sector_id) REFERENCES grnd.sectores(id);
+
+
+--
+-- TOC entry 4784 (class 2606 OID 16973)
 -- Name: reportes FK_9f5a7760297e1c8250297ec0ee2; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -907,7 +917,7 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4784 (class 2606 OID 16983)
+-- TOC entry 4785 (class 2606 OID 16983)
 -- Name: reportes FK_b89ed963e02b4950b308726e4cf; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -916,7 +926,7 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4777 (class 2606 OID 17024)
+-- TOC entry 4778 (class 2606 OID 17024)
 -- Name: localidades FK_ca3fa94f624c61db91f82fa3668; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -925,7 +935,7 @@ ALTER TABLE ONLY grnd.localidades
 
 
 --
--- TOC entry 4786 (class 2606 OID 16988)
+-- TOC entry 4787 (class 2606 OID 16988)
 -- Name: usuarios FK_ccd816326d8b5e1d61b31fbe33b; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -934,7 +944,7 @@ ALTER TABLE ONLY grnd.usuarios
 
 
 --
--- TOC entry 4785 (class 2606 OID 16993)
+-- TOC entry 4786 (class 2606 OID 16993)
 -- Name: reportes FK_d4d2a97fde820000214e06510e5; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
@@ -943,28 +953,19 @@ ALTER TABLE ONLY grnd.reportes
 
 
 --
--- TOC entry 4778 (class 2606 OID 16998)
--- Name: moderador_sector moderador_sector_moderador_fk; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
+-- TOC entry 4780 (class 2606 OID 17031)
+-- Name: moderador_sector FK_f194f5d9084a050e699c82593eb; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
 --
 
 ALTER TABLE ONLY grnd.moderador_sector
-    ADD CONSTRAINT moderador_sector_moderador_fk FOREIGN KEY (moderador_id) REFERENCES grnd.moderadores(id) ON DELETE CASCADE;
+    ADD CONSTRAINT "FK_f194f5d9084a050e699c82593eb" FOREIGN KEY (moderador_id) REFERENCES grnd.moderadores(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
---
--- TOC entry 4779 (class 2606 OID 17003)
--- Name: moderador_sector moderador_sector_sector_fk; Type: FK CONSTRAINT; Schema: grnd; Owner: postgres
---
-
-ALTER TABLE ONLY grnd.moderador_sector
-    ADD CONSTRAINT moderador_sector_sector_fk FOREIGN KEY (sector_id) REFERENCES grnd.sectores(id) ON DELETE CASCADE;
-
-
--- Completed on 2025-09-18 03:35:41
+-- Completed on 2025-09-18 12:32:17
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 7hRfbRuCASyiBcK7R9Er9dIqA29kf7jSCScbIqJgBPhF1aQI75sDFCkF7ef6Cmt
+\unrestrict W830kiI5GaSKKZeJRzFeWveQQ0ahYMRuXtlbsgnKT6ZnLKRe21Vrc48k2PdZQua
 

@@ -17,7 +17,8 @@ export class ModeradorAdapter implements ModeradorPort {
             id: m.id,
             nombre: m.nombre,
             email: m.email,
-            password: m.password
+            password: m.password,
+            isAdmin: m.isAdmin,
         };
     }
 
@@ -26,12 +27,19 @@ export class ModeradorAdapter implements ModeradorPort {
         moderadorEntity.nombre = m.nombre;
         moderadorEntity.email = m.email;
         moderadorEntity.password = m.password;
+        moderadorEntity.isAdmin = m.isAdmin;
         return moderadorEntity;
     }
 
     async createModerador(m: Omit<Moderador, "id">): Promise<number> {
-        const newModerador = this.toEntity(m);
-        const savedModerador = await this.moderadorRepository.save(newModerador);
+        const entity = this.moderadorRepository.create({
+            nombre: m.nombre,
+            email: m.email,
+            password: m.password,
+            isAdmin: false,
+        });
+
+        const savedModerador = await this.moderadorRepository.save(entity);
         return savedModerador.id;
     }
 

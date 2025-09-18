@@ -4,9 +4,9 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'Green Node',
+  description: 'Created by GREEN NODE TEAM',
+  generator: 'GRND.dev',
 }
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
