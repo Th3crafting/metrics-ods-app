@@ -1,19 +1,20 @@
 import { Router } from "express";
-import { EstadoAdapter } from "../adapter/EstadoAdapter";
-import { EstadoApplication } from "../../application/EstadosApplication";
-import { EstadoController } from "../controller/EstadosController";
+
+import { NivelIncidenciaAdapter } from '../adapter/NivelIncidenciaAdapter';
+import { NivelIncidenciaApplication } from "../../application/NivelIncidenciaApplication";
+import { NivelIncidenciaController } from "../controller/NivelIncidenciaController";
 import { authenticateToken } from "../web/authMiddleware";
 
 const router = Router();
 
-const estadoAdapter = new EstadoAdapter();
-const estadoApp = new EstadoApplication(estadoAdapter);
-const estadoController = new EstadoController(estadoApp);
+const nivelIncidenciaAdapter = new NivelIncidenciaAdapter();
+const nivelIncidenciaApp = new NivelIncidenciaApplication(nivelIncidenciaAdapter);
+const nivelIncidenciaController = new NivelIncidenciaController(nivelIncidenciaApp);
 
-router.post("/estados", authenticateToken, async (req, res) => estadoController.createEstado(req, res));
-router.get("/estados", authenticateToken, async (req, res) => estadoController.getAllEstados(req, res));
-router.get("/estados/:id", authenticateToken, async (req, res) => estadoController.getEstadoById(req, res));
-router.put("/estados/:id", authenticateToken, async (req, res) => estadoController.updateEstado(req, res));
-router.delete("/estados/:id", authenticateToken, async (req, res) => estadoController.deleteEstado(req, res));
+router.post("/niveles", authenticateToken, async (req, res) => nivelIncidenciaController.createNivelIncidencia(req, res));
+router.get("/niveles", authenticateToken, async (req, res) => nivelIncidenciaController.getAllNivelesIncidencias(req, res));
+router.get("/niveles/:id", authenticateToken, async (req, res) => nivelIncidenciaController.getNivelIncidenciaById(req, res));
+router.put("/niveles/:id", authenticateToken, async (req, res) => nivelIncidenciaController.updateNivelIncidencia(req, res));
+router.delete("/niveles/:id", authenticateToken, async (req, res) => nivelIncidenciaController.deleteNivelIncidencia(req, res));
 
 export default router;

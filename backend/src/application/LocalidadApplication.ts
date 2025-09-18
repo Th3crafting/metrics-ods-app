@@ -1,6 +1,13 @@
 import { Localidad } from "../domain/localidad/Localidad";
 import { LocalidadPort } from "../domain/localidad/LocalidadPort";
 
+export type LocalidadListDTO = {
+    id: number;
+    nombre: string;
+    sectorId: number;
+    sectorNombre: string;
+};
+
 export class LocalidadApplication {
     private port: LocalidadPort;
 
@@ -9,7 +16,7 @@ export class LocalidadApplication {
     }
 
     async createLocalidad(localidad: Omit<Localidad, "id">): Promise<number> {
-        const existing = await this.port.getAllLocalidades();
+        const existing = await this.port.findByName(localidad.nombre);
         if (existing) {
             throw new Error("La localidad ya existe");
         }
@@ -44,7 +51,7 @@ export class LocalidadApplication {
         return await this.port.getLocalidadById(id);
     }
 
-    async getAllLocalidades(): Promise<Localidad[]> {
-        return await this.port.getAllLocalidades();
+    async getAllLocalidades(): Promise<LocalidadListDTO[]> {
+        return await this.port.getAllLocalidadesWithSector();
     }
 }

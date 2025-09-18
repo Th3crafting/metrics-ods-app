@@ -131,7 +131,7 @@ export class UserController{
             const userId = parseInt(request.params.id);
             if(isNaN(userId)) return response.status(400).json({message:"Error en parámetro"});
 
-            let { name, email, password, status } = request.body;
+            let { name, email, password } = request.body;
 
             if (name && !Validators.name(name)) 
             return response.status(400).json({message:"El nombre debe tener al menos 3 caracteresponse y solo contener letras",});

@@ -1,9 +1,15 @@
-import { Repository } from "typeorm";
+import { Repository, ILike } from "typeorm";
 
-import { Reporte } from "../../domain/reporte/Reporte";
+import { NewReporte, Reporte } from "../../domain/reporte/Reporte";
 import { ReportePort } from "../../domain/reporte/ReportePort";
 import { ReporteEntity } from "../entities/ReporteEntity";
 import { AppDataSource } from "../config/con_data_base";
+import { UsuarioEntity } from "../entities/UsuarioEntity";
+import { TipoReporteEntity } from "../entities/TipoReporteEntity";
+import { SectorEntity } from "../entities/SectorEntity";
+import { EstadoEntity } from '../entities/EstadosEntity';
+import { NivelIncidenciaEntity } from "../entities/NivelIncidenciaEntity";
+import { EntidadExternaEntity } from "../entities/EntidadExternaEntity";
 
 export class ReporteAdapter implements ReportePort {
   private reporteRepository: Repository<ReporteEntity>;
@@ -12,54 +18,107 @@ export class ReporteAdapter implements ReportePort {
     this.reporteRepository = AppDataSource.getRepository(ReporteEntity);
   }
 
- private toDomain(reporte: ReporteEntity): Reporte {
-  return {
-    id: reporte.id,
-    titulo: reporte.titulo,
-    descripcion: reporte.descripcion,
-    direccion: reporte.direccion,
-    latitud: reporte.latitud,
-    longitud: reporte.longitud,
-    fecha: reporte.fecha,
-    usuarioId: reporte.usuario?.id,
-    tipoReporteId: reporte.tipoReporte?.id,
-    sectorId: reporte.sector?.id,
-    EntidadExternaid: reporte.entidadExterna?.id,
-    estadoId: reporte.estado?.id ?? null, 
-    NivelIncidenciaId: reporte.nivelIncidencia?.id ?? null,
-  };
-}
-
+  private toDomain(reporte: ReporteEntity): Reporte {
+    return {
+      id: reporte.id,
+      titulo: reporte.titulo,
+      descripcion: reporte.descripcion,
+      direccion: reporte.direccion,
+      fecha: reporte.fecha,
+      usuarioId: reporte.usuario?.id,
+      tipoReporteId: reporte.tipoReporte?.id,
+      sectorId: reporte.sector?.id,
+      entidadExternaId: reporte.entidadExterna?.id,
+      estadoId: reporte.estado?.id,
+      nivelIncidenciaId: reporte.nivelIncidencia?.id,
+    };
+  }
 
   private toEntity(reporte: Omit<Reporte, "id">): ReporteEntity {
     const reporteEntity = new ReporteEntity();
     reporteEntity.titulo = reporte.titulo;
-    reporteEntity.descripcion = reporte.descripcion;
-    reporteEntity.direccion = reporte.direccion;
-    reporteEntity.latitud = reporte.latitud;
-    reporteEntity.longitud = reporte.longitud;
-    reporteEntity.fecha = reporte.fecha;
-    if (reporte.usuarioId) reporteEntity.usuario = { id: reporte.usuarioId } as any;
-    if (reporte.tipoReporteId) reporteEntity.tipoReporte = { id: reporte.tipoReporteId } as any;
-    if (reporte.sectorId) reporteEntity.sector = { id: reporte.sectorId } as any;
-    if (reporte.EntidadExternaid) reporteEntity.entidadExterna = { id: reporte.EntidadExternaid } as any;
-    if (reporte.estadoId) reporteEntity.estado = { id: reporte.estadoId } as any;
-    if (reporte.NivelIncidenciaId) reporteEntity.nivelIncidencia = { id: reporte.NivelIncidenciaId } as any;
-
+    reporteEntity.descripcion = reporte.descripcion ?? null;
+    reporteEntity.direccion = reporte.direccion ?? null;
+    reporteEntity.usuario = { id: reporte.usuarioId } as UsuarioEntity;
+    reporteEntity.tipoReporte = { id: reporte.tipoReporteId } as TipoReporteEntity;
+    reporteEntity.sector = { id: reporte.sectorId } as SectorEntity;
+    reporteEntity.estado = { id: reporte.estadoId } as EstadoEntity;
+    reporteEntity.nivelIncidencia = { id: reporte.nivelIncidenciaId } as NivelIncidenciaEntity;
+    if (reporte.entidadExternaId) reporteEntity.entidadExterna = { id: reporte.entidadExternaId } as any | null;
     return reporteEntity;
   }
 
-  async createReporte(reporte: Omit<Reporte, "id">): Promise<number> {
-    const newReporte = this.toEntity(reporte);
-    const savedReporte = await this.reporteRepository.save(newReporte);
-    return savedReporte.id;
+  async existsUsuario(id: number): Promise<boolean> {
+    return AppDataSource.getRepository(UsuarioEntity).exists({ where: { id } });
+  }
+
+  async existsTipoReporte(id: number): Promise<boolean> {
+    return AppDataSource.getRepository(TipoReporteEntity).exists({ where: { id } });
+  }
+
+  async existsSector(id: number): Promise<boolean> {
+    return AppDataSource.getRepository(SectorEntity).exists({ where: { id } });
+  }
+
+  async existsNivelIncidencia(id: number): Promise<boolean> {
+    return AppDataSource.getRepository(NivelIncidenciaEntity).exists({ where: { id } });
+  }
+
+  async existsEntidadExterna(id: number): Promise<boolean> {
+    return AppDataSource.getRepository(EntidadExternaEntity).exists({ where: { id } });
+  }
+
+  async getEstadoAbierto(): Promise<number> {
+    const repo = AppDataSource.getRepository(EstadoEntity);
+    const estado = await repo.findOne({ where: { nombre: ILike("Abierto") } });
+    if (!estado) throw new Error('No se encontró el estado "Abierto".');
+    return estado.id;
+  }
+
+  async createReporte(input: NewReporte, estadoId: number): Promise<Reporte> {
+    const entity = this.reporteRepository.create({
+      titulo: input.titulo,
+      descripcion: input.descripcion ?? null,
+      direccion: input.direccion ?? null,
+      usuario: { id: input.usuarioId } as UsuarioEntity,
+      tipoReporte: { id: input.tipoReporteId } as TipoReporteEntity,
+      sector: { id: input.sectorId } as SectorEntity,
+      estado: { id: estadoId } as EstadoEntity,
+      nivelIncidencia: { id: input.nivelIncidenciaId } as NivelIncidenciaEntity,
+      entidadExterna: null,
+    });
+
+    const saved = await this.reporteRepository.save(entity);
+
+    const reloaded = await this.reporteRepository.findOne({
+      where: { id: saved.id },
+      relations: ["usuario", "tipoReporte", "sector", "entidadExterna", "estado", "nivelIncidencia"],
+    });
+    if (!reloaded) throw new Error("No se pudo recargar el reporte creado.");
+
+    return this.toDomain(reloaded);
   }
 
   async updateReporte(id: number, reporte: Partial<Reporte>): Promise<boolean> {
-    const existingReporte = await this.reporteRepository.findOne({ where: { id } });
-    if (!existingReporte) return false;
-    Object.assign(existingReporte, this.toEntity(reporte as Omit<Reporte, "id">));
-    await this.reporteRepository.save(existingReporte);
+    const repo = this.reporteRepository;
+
+    const existing = await repo.findOne({
+      where: { id },
+      relations: ["entidadExterna", "estado"],
+    });
+    if (!existing) return false;
+
+    if (reporte.estadoId !== undefined) {
+      existing.estado = { id: reporte.estadoId } as EstadoEntity;
+    }
+
+    if (reporte.entidadExternaId === null) {
+      existing.entidadExterna = null;
+    } else if (typeof reporte.entidadExternaId === "number") {
+      existing.entidadExterna = { id: reporte.entidadExternaId } as EntidadExternaEntity;
+    }
+
+    await repo.save(existing);
     return true;
   }
 

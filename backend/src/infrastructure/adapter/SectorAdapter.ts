@@ -16,14 +16,12 @@ export class SectorAdapter implements SectorPort {
         return {
             id: sector.id,
             nombre: sector.nombre,
-            localidad: sector.localidad.id,
         };
     }
 
     private toEntity(sector: Omit<Sector, "id">): SectorEntity {
         const sectorEntity = new SectorEntity();
         sectorEntity.nombre = sector.nombre;
-        sectorEntity.localidad
         return sectorEntity;
     }
 
@@ -49,20 +47,12 @@ export class SectorAdapter implements SectorPort {
     }
 
     async getAllSectores(): Promise<Sector[]> {
-        const sectores = await this.sectorRepository.find({ relations: ["localidad"] });
+        const sectores = await this.sectorRepository.find({ relations: ["localidades"] });
         return sectores.map(this.toDomain);
     }
 
     async getSectorById(id: number): Promise<Sector | null> {
-        const sector = await this.sectorRepository.findOne({ where: { id }, relations: ["localidad"] });
+        const sector = await this.sectorRepository.findOne({ where: { id }, relations: ["localidades"] });
         return sector ? this.toDomain(sector) : null;
-    }
-
-    async getSectoresByLocalidad(localidadId: number): Promise<Sector[]> {
-        const sectores = await this.sectorRepository.find({
-            where: { localidad: { id: localidadId } },
-            relations: ["localidad"],
-        });
-        return sectores.map(this.toDomain);
     }
 }

@@ -10,7 +10,15 @@ import {
   Dimensions,
   ActivityIndicator
 } from "react-native";
-import { ArrowLeft, Droplets } from "lucide-react-native";
+import {
+  ArrowLeft,
+  Droplets,
+  Trash2,
+  TreePine,
+  Volume2,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,9 +30,9 @@ type ReportCard = {
   titulo: string;
   descripcion: string;
   direccion: string;
-  latitud: string;
-  longitud: string;
   fecha: string;
+  tipoReporteId: number;
+  tipoReporteNombre: string;
 };
 
 type DashboardData = {
@@ -40,6 +48,33 @@ type DashboardData = {
 
 type StatusLabel = "Abierto" | "Pendiente" | "En Revisión" | "Cerrado" | "Rechazado";
 type ReportWithStatus = ReportCard & { __status: StatusLabel };
+
+const iconByTipoId: Record<number, React.ComponentType<{ size?: number; color?: string }>> = {
+  2: Trash2,
+  3: Droplets,
+  4: TreePine,
+  5: Volume2,
+  6: AlertTriangle,
+};
+
+const iconByTipoName: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
+  basura: Trash2,
+  fugas: Droplets,
+  tala: TreePine,
+  ruido: Volume2,
+  otros: AlertTriangle,
+};
+
+function getIconForReport(r: { tipoReporteId?: number; tipoReporteNombre?: string }) {
+  if (typeof r.tipoReporteId === "number" && iconByTipoId[r.tipoReporteId]) {
+    return iconByTipoId[r.tipoReporteId];
+  }
+  if (r.tipoReporteNombre) {
+    const k = r.tipoReporteNombre.trim().toLowerCase();
+    if (iconByTipoName[k]) return iconByTipoName[k];
+  }
+  return AlertCircle;
+}
 
 const tag = <T extends ReportCard>(arr: T[], label: StatusLabel): (T & { __status: StatusLabel })[] =>
   arr.map(r => ({ ...r, __status: label }));
@@ -142,15 +177,15 @@ export default function MyReportsScreen() {
   }
   
   const getStatusStyle = (status: ReportWithStatus["__status"]) => {
-  switch (status) {
-    case "Pendiente": return { color: "#ca8a04", bg: "#fef9c3" };
-    case "Cerrado": return { color: "#16a34a", bg: "#dcfce7" };
-    case "Rechazado": return { color: "#dc2626", bg: "#fee2e2" };
-    case "En Revisión": return { color: "#2563eb", bg: "#dbeafe" };
-    case "Abierto": return { color: "#6b7280", bg: "#e5e7eb" };
-    default: return { color: "#6b7280", bg: "#e5e7eb" };
-  }
-};
+    switch (status) {
+      case "Pendiente": return { color: "#ca8a04", bg: "#fef9c3" };
+      case "Cerrado": return { color: "#16a34a", bg: "#dcfce7" };
+      case "Rechazado": return { color: "#dc2626", bg: "#fee2e2" };
+      case "En Revisión": return { color: "#2563eb", bg: "#dbeafe" };
+      case "Abierto": return { color: "#6b7280", bg: "#e5e7eb" };
+      default: return { color: "#6b7280", bg: "#e5e7eb" };
+    }
+  };
   
   return (
     <SafeAreaView style={styles.safe}>
@@ -200,10 +235,11 @@ export default function MyReportsScreen() {
           {/* List */}
           {filteredReports.map((r) => {
             const s = getStatusStyle(r.__status);
+            const Icon = getIconForReport(r);
             return (
               <View key={r.id} style={styles.reportCard}>
                 <View style={styles.reportHeader}>
-                  <Droplets size={20} color="#3b82f6" />
+                  <Icon size={20} color="#3b82f6" />
                   <Text style={styles.reportType}>{r.titulo}</Text>
                   <View style={[styles.statusBox, { backgroundColor: s.bg }]}>
                     <Text style={{ color: s.color, fontSize: 12 }}>{r.__status}</Text>

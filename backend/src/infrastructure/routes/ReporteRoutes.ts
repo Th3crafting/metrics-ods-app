@@ -29,10 +29,26 @@ router.get("/dashboard", authenticateToken, reporteController.myDashboard.bind(r
     }
 })
 
-router.post("/reportes", authenticateToken, async (req, res) => reporteController.createReporte(req, res));
+router.post("/reportes", authenticateToken, async (request, response) => {
+    try {
+        await reporteController.createReporte(request, response);
+    } catch (error) {
+        console.error("Error al intentar crear el reporte", error);
+        response.status(400).json({message: "Error al crear el reporte"});
+    }
+});
+
+router.put("/reportes/:id", authenticateToken, async(request, response) => {
+    try {
+        await reporteController.updateReporte(request, response);
+    } catch (error) {
+        console.error("Error al intentar actualizar el registro", error);
+        response.status(400).json({message: "Error al actualizar el registro"});
+    }
+});
+
 router.get("/reportes", authenticateToken, async (req, res) => reporteController.getAllReportes(req, res));
 router.get("/reportes/:id", authenticateToken, async (req, res) => reporteController.getReporteById(req, res));
-router.put("/reportes/:id", authenticateToken, async (req, res) => reporteController.updateReporte(req, res));
 router.delete("/reportes/:id", authenticateToken, async (req, res) => reporteController.deleteReporte(req, res));
 
 export default router;
