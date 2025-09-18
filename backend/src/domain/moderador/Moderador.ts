@@ -3,4 +3,5 @@ export interface Moderador {
     nombre: string;
     email: string;
     password: string;
+    isAdmin: boolean;
 }

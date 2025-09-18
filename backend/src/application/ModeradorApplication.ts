@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { Moderador } from "../domain/moderador/Moderador";
 import { ModeradorPort } from "../domain/moderador/ModeradorPort";
 import { AuthApplication } from "./AuthApplication";
+import { AdminAuthApplication } from "./AdminAuthApplication";
 
 export class ModeradorApplication {
     private port: ModeradorPort;
@@ -18,7 +19,21 @@ export class ModeradorApplication {
         const match = await bcrypt.compare(password, moderador.password);
         if (!match) throw new Error("Credenciales inválidas");
 
-        return AuthApplication.generateToken({ id: moderador.id, email: moderador.email });
+        const payload = {
+            sub: moderador.id,
+            email: moderador.email,
+            is_admin: !!moderador.isAdmin,
+        }
+
+        if (moderador.isAdmin) {
+            return (
+                AdminAuthApplication.generateToken(payload)
+            );
+        } else {
+            return (
+                AuthApplication.generateToken(payload)
+            );
+        }
     }
 
     async createModerador(moderador: Omit<Moderador, "id">): Promise<number> {
