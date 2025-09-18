@@ -1,7 +1,7 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 
 import { Localidad } from "../../domain/localidad/Localidad";
-import { LocalidadPort } from "../../domain/localidad/LocalidadPort";
+import { LocalidadPort, LocalidadListDTO } from "../../domain/localidad/LocalidadPort";
 import { LocalidadEntity } from "../entities/LocalidadEntity";
 import { AppDataSource } from "../config/con_data_base";
 
@@ -49,7 +49,25 @@ export class LocalidadAdapter implements LocalidadPort {
     }
 
     async getLocalidadById(id: number): Promise<Localidad | null> {
-        const localidades =   await this.localidadRepository.findOne({ where: { id }, relations: ["usuario", "tipoReporte", "sector"] });
+        const localidades =   await this.localidadRepository.findOne({ where: { id }, relations: ["usuarios", "sector"] });
         return localidades ? this.toDomain(localidades) : null;
+    }
+
+    async getAllLocalidadesWithSector(): Promise<LocalidadListDTO[]> {
+        const localidades = await this.localidadRepository.find({
+            relations: ["sector"],
+        });
+
+        return localidades.map((l) => ({
+            id: l.id,
+            nombre: l.nombre,
+            sectorId: l.sector?.id ?? 0,
+            sectorNombre: l.sector?.nombre ?? "",
+        }));
+    }
+
+    async findByName(nombre: string): Promise<Localidad | null> {
+        const localidad = await this.localidadRepository.findOne({ where: { nombre: ILike(nombre.trim()) }, });
+        return localidad ? this.toDomain(localidad) : null;
     }
 }

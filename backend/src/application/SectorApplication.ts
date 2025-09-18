@@ -27,8 +27,4 @@ export class SectorApplication {
     async getSectorById(id: number): Promise<Sector | null> {
         return this.sectorPort.getSectorById(id);
     }
-
-    async getSectoresByLocalidad(localidadId: number): Promise<Sector[]> {
-        return this.sectorPort.getSectoresByLocalidad(localidadId);
-    }
 }

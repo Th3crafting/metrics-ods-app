@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 
 import { ReporteApplication } from "../../application/ReporteApplication";
-import { Reporte } from "../../domain/reporte/Reporte";
+import { NewReporte, Reporte } from "../../domain/reporte/Reporte";
 import { AppDataSource } from "../config/con_data_base";
 import { ReporteEntity } from "../entities/ReporteEntity";
 import { ESTADOS } from "../constants/estados";
-import { DashboardResponse } from "../interfaces/MyDashboard";
+import { DashboardResponse, DashboardReportItem } from "../interfaces/MyDashboard";
+
+type RequestWithUser = Request & { user?: { id: number; email?: string } };
 
 export class ReporteController {
     private app: ReporteApplication;
@@ -14,50 +16,98 @@ export class ReporteController {
         this.app = app;
     }
 
-    async createReporte(req: Request, res: Response): Promise<Response> {
+    createReporte = async (req: RequestWithUser, res: Response) => {
         try {
-            const { titulo, descripcion, direccion, latitud, longitud, fecha, estado, usuarioId, tipoReporteId, sectorId,EntidadExternaid } = req.body;
-
-            if (!titulo || !descripcion || !direccion || !usuarioId || !tipoReporteId || !sectorId) {
-                return res.status(400).json({ message: "Faltan campos obligatorios" });
+            if (!req.user?.id) {
+            return res.status(401).json({ message: "No autorizado" });
             }
 
-            const reporte: Omit<Reporte, "id"> = {
-                titulo,
-                descripcion,
-                direccion,
-                latitud,
-                longitud,
-                fecha: fecha ? new Date(fecha) : new Date(),
-                estadoId: estado || "pendiente",
-                usuarioId,
-                tipoReporteId,
-                sectorId,
-                EntidadExternaid
+            const userId = Number(req.user.id);
+            if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({ message: "ID inválido" });
+            }
+
+            const { titulo, descripcion, direccion, tipoReporteId, sectorId, nivelIncidenciaId } = req.body ?? {};
+
+            if (!titulo || typeof titulo !== "string") {
+            return res.status(400).json({ message: "El título es obligatorio." });
+            }
+            if (!Number.isInteger(tipoReporteId) || tipoReporteId <= 0) {
+            return res.status(400).json({ message: "tipoReporteId inválido." });
+            }
+            if (!Number.isInteger(sectorId) || sectorId <= 0) {
+            return res.status(400).json({ message: "sectorId inválido." });
+            }
+            if (!Number.isInteger(nivelIncidenciaId) || nivelIncidenciaId <= 0) {
+            return res.status(400).json({ message: "nivelIncidenciaId inválido." });
+            }
+
+            const input: NewReporte = {
+            titulo: titulo.trim(),
+            descripcion: descripcion ?? null,
+            direccion: direccion ?? null,
+            tipoReporteId,
+            sectorId,
+            nivelIncidenciaId,
+            entidadExternaId: null,
+            usuarioId: userId,
             };
 
-            const id = await this.app.createReporte(reporte);
-            return res.status(201).json({ message: "Reporte creado", id });
-
-        } catch (error) {
-            return res.status(500).json({ message: "Error en el servidor", error });
+            const creado = await this.app.create(input);
+            return res.status(201).json(creado);
+        } catch (err: any) {
+            return res.status(400).json({ message: err?.message ?? "Error creando el reporte" });
         }
-    }
+    };
 
-    async updateReporte(req: Request, res: Response): Promise<Response> {
+    updateReporte = async (req: RequestWithUser, res: Response) => {
         try {
-            const id = parseInt(req.params.id);
-            if (isNaN(id)) return res.status(400).json({ message: "ID inválido" });
+            if (!req.user?.id) return res.status(401).json({ message: "No autorizado" });
 
-            const updated = await this.app.updateReporte(id, req.body);
-            if (!updated) return res.status(404).json({ message: "Reporte no encontrado" });
+            const id = Number(req.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+            return res.status(400).json({ message: "Id inválido" });
+            }
+
+            const { estadoId, entidadExternaId, ...rest } = req.body ?? {};
+            const unknown = Object.keys(rest);
+            if (unknown.length > 0) {
+            return res.status(400).json({
+                message: `Campos no permitidos en update: ${unknown.join(", ")} (solo estadoId, entidadExternaId)`,
+            });
+            }
+
+            if (estadoId === undefined && entidadExternaId === undefined) {
+            return res.status(400).json({ message: "Nada para actualizar (envía estadoId y/o entidadExternaId)" });
+            }
+
+            const patch: Partial<Reporte> = {};
+            if (estadoId !== undefined) {
+            const v = Number(estadoId);
+            if (!Number.isInteger(v) || v <= 0) {
+                return res.status(400).json({ message: "estadoId inválido" });
+            }
+            patch.estadoId = v;
+            }
+
+            if (entidadExternaId === null) {
+            patch.entidadExternaId = null;
+            } else if (entidadExternaId !== undefined) {
+            const v = Number(entidadExternaId);
+            if (!Number.isInteger(v) || v <= 0) {
+                return res.status(400).json({ message: "entidadExternaId inválido" });
+            }
+            patch.entidadExternaId = v;
+            }
+
+            const ok = await this.app.update(id, patch);
+            if (!ok) return res.status(404).json({ message: "Reporte no encontrado" });
 
             return res.status(200).json({ message: "Reporte actualizado" });
-
-        } catch (error) {
-            return res.status(500).json({ message: "Error en el servidor", error });
+        } catch (err: any) {
+            return res.status(400).json({ message: err?.message ?? "Error actualizando el reporte" });
         }
-    }
+    };
 
     async deleteReporte(req: Request, res: Response): Promise<Response> {
         try {
@@ -133,6 +183,7 @@ export class ReporteController {
 
             const baseQB = repo
                 .createQueryBuilder("r")
+                .leftJoinAndSelect("r.tipoReporte", "tipoReporte")
                 .where("r.usuarioId = :userId", {userId});
 
             const now = new Date();
@@ -185,15 +236,31 @@ export class ReporteController {
                 listFor(ESTADOS.RECHAZADO),
             ]);
 
+            const toCard = (r: ReporteEntity): DashboardReportItem => ({
+                id: r.id,
+                titulo: r.titulo ?? "",
+                descripcion: r.descripcion ?? null,
+                direccion: r.direccion ?? "",
+                fecha: r.fecha instanceof Date ? r.fecha.toISOString() : String(r.fecha),
+                tipoReporteId: r.tipoReporte?.id ?? 0,
+                tipoReporteNombre: r.tipoReporte.nombre ?? "",
+            });
+
+            const abiertosDTO   = abiertos.map(toCard);
+            const pendientesDTO = pendientes.map(toCard);
+            const enRevisionDTO = enRevision.map(toCard);
+            const cerradosDTO   = cerrados.map(toCard);
+            const rechazadosDTO = rechazados.map(toCard);
+
             const payload: DashboardResponse = {
                 totals: { total, thisMonth},
                 byStatus,
                 lists: {
-                    Abierto: abiertos,
-                    Pendiente: pendientes,
-                    EnRevision: enRevision,
-                    Cerrado: cerrados,
-                    Rechazado: rechazados,
+                    Abierto: abiertosDTO,
+                    Pendiente: pendientesDTO,
+                    EnRevision: enRevisionDTO,
+                    Cerrado: cerradosDTO,
+                    Rechazado: rechazadosDTO,
                 },
             };
 

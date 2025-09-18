@@ -4,13 +4,13 @@ import { ReporteEntity } from "./ReporteEntity";
 
 @Entity("tipos_reportes")
 export class TipoReporteEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id!: number;
 
-  @Column()
+  @Column({ type: "character varying" })
   nombre!: string;
 
-  @Column()
+  @Column({ type: "character varying", nullable: true })
   descripcion!: string;
 
   @OneToMany(() => ReporteEntity, (reporte) => reporte.tipoReporte)

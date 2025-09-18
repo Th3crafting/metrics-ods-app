@@ -6,5 +6,4 @@ export interface SectorPort {
     deleteSector(id:number):Promise<boolean>;
     getAllSectores():Promise<Sector[]>;
     getSectorById(id:number):Promise<Sector | null>;
-    getSectoresByLocalidad(localidadId:number):Promise<Sector[]>;
 }

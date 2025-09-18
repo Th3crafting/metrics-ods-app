@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 import { ReporteEntity } from "./ReporteEntity";
 import { LocalidadEntity } from "./LocalidadEntity";
@@ -8,11 +8,11 @@ export class SectorEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "character varying", name: "nombre"})
   nombre!: string;
 
-  @ManyToOne(() => LocalidadEntity, (localidad) => localidad.sectores)
-  localidad!: LocalidadEntity;
+  @OneToMany(() => LocalidadEntity, (localidad) => localidad.sector)
+  localidades!: LocalidadEntity[];
 
   @OneToMany(() => ReporteEntity, (reporte) => reporte.sector)
   reportes!: ReporteEntity[];

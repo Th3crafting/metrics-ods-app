@@ -11,14 +11,24 @@ export interface DashboardByStatus {
     Rechazado: number;
 }
 
+export interface DashboardReportItem {
+    id: number;
+    titulo: string;
+    descripcion: string | null;
+    direccion: string;
+    fecha: string;
+    tipoReporteId: number;
+    tipoReporteNombre: string;
+}
+
 export interface DashboardResponse {
     totals: { total: number; thisMonth: number };
     byStatus: DashboardByStatus;
     lists: {
-        Abierto: any[];
-        Pendiente: any[];
-        EnRevision: any[];
-        Cerrado: any[];
-        Rechazado: any[];
+        Abierto: DashboardReportItem[];
+        Pendiente: DashboardReportItem[];
+        EnRevision: DashboardReportItem[];
+        Cerrado: DashboardReportItem[];
+        Rechazado: DashboardReportItem[];
     };
 }

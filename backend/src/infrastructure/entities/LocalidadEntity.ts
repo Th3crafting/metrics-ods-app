@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 
 import { SectorEntity } from "./SectorEntity";
 import { UsuarioEntity } from "./UsuarioEntity";
@@ -11,9 +11,10 @@ export class LocalidadEntity {
   @Column()
   nombre!: string;
 
-  @OneToMany(() => SectorEntity, (sector) => sector.localidad)
-  sectores!: SectorEntity[];
+  @ManyToOne(() => SectorEntity, (sector) => sector.localidades, { eager: true })
+  @JoinColumn({ name: "sector_id" })
+  sector!: SectorEntity;
 
-   @OneToMany(() => UsuarioEntity, (usuario) => usuario.localidad)
+  @OneToMany(() => UsuarioEntity, (usuario) => usuario.localidad)
   usuarios!: UsuarioEntity[];
 }

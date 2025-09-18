@@ -1,15 +1,18 @@
-export interface Reporte {
-    id: number;
+export interface NewReporte {
     titulo: string;
-    descripcion: string;
-    direccion: string;
-    latitud: number;
-    longitud: number;
-    fecha: Date;
-    estadoId?: number | null;
-    usuarioId: number;
+    descripcion?: string | null;
+    direccion?: string | null;
+
     tipoReporteId: number;
     sectorId: number;
-    EntidadExternaid: number;
-    NivelIncidenciaId?: number | null;
+    nivelIncidenciaId: number;
+    entidadExternaId?: number | null;
+
+    usuarioId: number;
+}
+
+export interface Reporte extends NewReporte {
+    id: number;
+    fecha: Date;
+    estadoId: number;
 }

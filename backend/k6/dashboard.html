@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard K6</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 40px; }
+    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .card h2 { margin: 0; font-size: 1.2em; color: #555; }
+    .card p { font-size: 1.6em; margin: 10px 0 0; font-weight: bold; color: #222; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    canvas { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <h1>📊 Dashboard K6</h1>
+
+
+  <div class="cards">
+    <div class="card"><h2>Duracion Promedio</h2><p>1591.31 ms</p></div>
+    <div class="card"><h2>Requests Totales</h2><p>120</p></div>
+    <div class="card"><h2>Error Rate</h2><p>0.00%</p></div>
+    <div class="card"><h2>Checks Exitosos</h2><p>85.00%</p></div>
+    <div class="card"><h2>P95 Duración</h2><p>2512.1805 ms</p></div>
+  </div>
+
+
+  <div class="charts">
+    <canvas id="durationsChart"></canvas>
+    <canvas id="checksChart"></canvas>
+    <canvas id="vusChart"></canvas>
+    <canvas id="failuresChart"></canvas>
+    <canvas id="reqsChart"></canvas>
+  </div>
+
+  <script>
+    const durations = [321.4954,461.0844,484.1161,508.6451,682.6351,1046.0467,1230.6235,1340.9855,1341.5242,1407.2401,1434.8532,1435.2991,1435.4747,1435.5662,1435.7782,1435.9122,1436.2163,1438.7826,1438.8165,1438.8276,1445.5166,1445.6078,1446.0263,1446.1917,1446.236,1449.4555,1449.5212,1449.7106,1450.0683,1450.6635,1454.7638,1455.4768,1455.495,1455.6293,1455.646,1458.7628,1458.8446,1459.0893,1459.105,1459.1958,1460.0451,1460.1169,1460.5686,1473.9608,1474.0272,1475.3535,1476.3968,1477.6308,1478.7913,1479.3275,1479.3477,1479.4082,1487.3694,1498.4177,1498.9479,1498.9827,1499.7624,1511.627,1511.8582,1519.2041,1519.2091,1519.3832,1519.5826,1519.7691,1529.7552,1530.0328,1530.0894,1530.1637,1530.2129,1534.8696,1543.0975,1543.0993,1543.1282,1543.5984,1543.6486,1558.6892,1559.194,1572.8136,1575.3523,1576.5212,1577.1459,1577.1639,1636.4599,1636.536,1636.5804,1636.6559,1641.0274,1641.4917,1641.9879,1642.6021,1643.0982,1714.1694,1714.1974,1714.2811,1714.3202,1714.3506,1743.6866,1744.1819,1744.1897,1933.4801,1933.5592,1934.5227,2001.3347,2001.3738,2001.4077,2001.4343,2001.4957,2001.7105,2001.7789,2110.6132,2240.4574,2241.2714,2479.4098,2511.1318,2512.1805,2513.1473,2513.6512,2514.2544,2514.8279,2515.4187];
+    new Chart(document.getElementById('durationsChart'), {
+      type: 'line',
+      data: { labels: durations.map((_, i) => i+1),
+        datasets: [{ label: 'Duración (ms)', data: durations, borderColor: 'blue', fill: false }] }
+    });
+
+    const checks = [1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+    new Chart(document.getElementById('checksChart'), {
+      type: 'bar',
+      data: { labels: checks.map((_, i) => "Check " + (i+1)),
+        datasets: [{ label: 'Checks (1=OK, 0=FAIL)', data: checks, backgroundColor: checks.map(v => v ? 'green' : 'red') }] }
+    });
+
+
+    const vus = [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,5];
+    new Chart(document.getElementById('vusChart'), {
+      type: 'line',
+      data: { labels: vus.map((_, i) => i+1),
+        datasets: [{ label: 'Usuarios Virtuales', data: vus, borderColor: 'purple', fill: false }] }
+    });
+
+
+    const failures = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    new Chart(document.getElementById('failuresChart'), {
+      type: 'line',
+      data: { labels: failures.map((_, i) => i+1),
+        datasets: [{ label: 'Errores HTTP (0=OK, 1=Error)', data: failures, borderColor: 'red', fill: false }] }
+    });
+
+    const reqs = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+    new Chart(document.getElementById('reqsChart'), {
+      type: 'bar',
+      data: { labels: reqs.map((_, i) => "Iter " + (i+1)),
+        datasets: [{ label: 'Requests', data: reqs, backgroundColor: 'orange' }] }
+    });
+  </script>
+</body>
+</html>

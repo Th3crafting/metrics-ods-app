@@ -9,25 +9,19 @@ import { NivelIncidenciaEntity } from "./NivelIncidenciaEntity";
 
 @Entity("reportes")
 export class ReporteEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id!: number;
 
-  @Column({ length: 100 })
+  @Column({ type: "character varying", length: 100 })
   titulo!: string;
 
-  @Column({ type: "text" })
-  descripcion!: string;
+  @Column({ type: "text", nullable: true })
+  descripcion!: string | null;
 
-  @Column({ nullable: true })
-  direccion!: string;
+  @Column({ type: "character varying", nullable: true })
+  direccion!: string | null;
 
-  @Column("decimal", { precision: 10, scale: 6, nullable: true })
-  latitud!: number;
-
-  @Column("decimal", { precision: 10, scale: 6, nullable: true })
-  longitud!: number;
-
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "now()" })
   fecha!: Date;
 
   @ManyToOne(() => UsuarioEntity, (usuario) => usuario.reportes, { eager: true })
@@ -41,16 +35,16 @@ export class ReporteEntity {
   @ManyToOne(() => SectorEntity, (sector) => sector.reportes, { eager: true })
   @JoinColumn({ name: "sectorId" })
   sector!: SectorEntity;
-
-  @ManyToOne(() => EntidadExternaEntity, entidad => entidad.reportes, { nullable: true })
-  @JoinColumn({ name: "entidad_externa_id" })
-  entidadExterna!: EntidadExternaEntity ;
-
+  
   @ManyToOne(() => EstadoEntity, { nullable: true })
   @JoinColumn({ name: "estadoId" })
   estado!: EstadoEntity;
-
+  
   @ManyToOne(() => NivelIncidenciaEntity, (nivel) => nivel.reportes)
   @JoinColumn({ name: "nivelIncidenciaId" })
   nivelIncidencia!: NivelIncidenciaEntity;
+
+  @ManyToOne(() => EntidadExternaEntity, entidad => entidad.reportes, { nullable: true })
+  @JoinColumn({ name: "entidad_externa_id" })
+  entidadExterna!: EntidadExternaEntity | null;
 }
