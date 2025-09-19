@@ -12,13 +12,13 @@ export class EntidadExternaController {
 
     async createEntidadExterna(req: Request, res: Response): Promise<Response> {
         try {
-            const { nombre, contacto,telefono } = req.body;
+            const { nombre, contacto, telefono } = req.body;
 
             if (!nombre || !contacto) {
                 return res.status(400).json({ message: "Faltan campos obligatorios" });
             }
 
-            const entidad: Omit<EntidadExterna, "id"> = { nombre, contacto,telefono };
+            const entidad: Omit<EntidadExterna, "id"> = { nombre, contacto, telefono };
             const id = await this.app.createEntidadExterna(entidad);
 
             return res.status(201).json({ message: "Entidad externa creada", id });

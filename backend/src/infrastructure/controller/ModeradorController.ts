@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { ModeradorApplication } from "../../application/ModeradorApplication";
 import { Moderador } from "../../domain/moderador/Moderador";
 import { Validators } from "../config/validations";
+import { ModeradorEntity } from "../entities/ModeradorEntity";
+import { AppDataSource } from "../config/con_data_base";
 
 export class ModeradorController {
     private app: ModeradorApplication;
@@ -31,7 +33,7 @@ export class ModeradorController {
         } catch (error) {
             return res.status(401).json({ message: "Credenciales inválidas" });
         }
-    }
+    };
 
     async createModerador(req: Request, res: Response): Promise<Response> {
         try {
@@ -54,7 +56,7 @@ export class ModeradorController {
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
         }
-    }
+    };
 
     async updateModerador(req: Request, res: Response): Promise<Response> {
         try {
@@ -68,7 +70,7 @@ export class ModeradorController {
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
         }
-    }
+    };
 
     async deleteModerador(req: Request, res: Response): Promise<Response> {
         try {
@@ -82,7 +84,7 @@ export class ModeradorController {
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
         }
-    }
+    };
 
     async getAllModeradores(req: Request, res: Response): Promise<Response> {
         try {
@@ -91,7 +93,7 @@ export class ModeradorController {
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
         }
-    }
+    };
 
     async getModeradorById(req: Request, res: Response): Promise<Response> {
         try {
@@ -105,5 +107,54 @@ export class ModeradorController {
         } catch (error) {
             return res.status(500).json({ message: "Error en el servidor", error });
         }
-    }
+    };
+
+    async infoModerator(request: Request, response: Response): Promise<Response> {
+        try {
+            const userId = (request as any).auth.id;
+            if (!userId) return response.status(401).json({message: "No autorizado"});
+
+            const repo = AppDataSource.getRepository(ModeradorEntity);
+            const user = await repo.findOne({where: {id: userId}});
+            if (!user) return response.status(404).json({message: "Usuario no encontrado"});
+
+            return response.json({id: user.id, name: user.nombre, email: user.email});
+        } catch (e) {
+            return response.status(500).json({message: "Error obteniendo usuario"});
+        }
+    };
+
+    async getSectores(request: Request, response: Response): Promise<Response> {
+        try {
+            const id = Number(request.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+                return response.status(400).json({ message: "Id inválido" });
+            }
+            const ids = await this.app.getSectoresIds(id);
+            return response.json(ids);
+        } catch (err: any) {
+            return response.status(400).json({ message: err?.message ?? "Error obteniendo sectores" });
+        }
+    };
+
+    async setSectores(request: Request, response: Response): Promise<Response> {
+        try {
+            const id = Number(request.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+            return response.status(400).json({ message: "Id inválido" });
+            }
+
+            const { sectorIds } = request.body ?? {};
+            if (!Array.isArray(sectorIds)) {
+            return response.status(400).json({ message: "sectorIds debe ser un array de números" });
+            }
+
+            const ok = await this.app.setSectores(id, sectorIds);
+            if (!ok) return response.status(404).json({ message: "Moderador no encontrado" });
+
+            return response.status(200).json({ message: "Sectores asignados" });
+        } catch (err: any) {
+            return response.status(400).json({ message: err?.message ?? "Error asignando sectores" });
+        }
+    };
 }

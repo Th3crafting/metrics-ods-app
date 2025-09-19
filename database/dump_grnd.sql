@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict W830kiI5GaSKKZeJRzFeWveQQ0ahYMRuXtlbsgnKT6ZnLKRe21Vrc48k2PdZQua
+\restrict 8Deqdt2hg9RfGzpxZNPj1cXHrxYrKXzylaF2tyJTemvJWPiC21vnbDrQeRU3w10
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
--- Started on 2025-09-18 12:32:17
+-- Started on 2025-09-18 22:15:37
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -213,8 +213,8 @@ ALTER SEQUENCE grnd.moderadores_id_seq OWNED BY grnd.moderadores.id;
 
 CREATE TABLE grnd.nivel_incidencia (
     id integer NOT NULL,
-    nivel integer NOT NULL,
-    descripcion character varying
+    descripcion character varying,
+    nivel integer NOT NULL
 );
 
 
@@ -496,6 +496,7 @@ COPY grnd.entidades_externas (id, nombre, contacto, telefono) FROM stdin;
 4	Alcaldía Local	contacto@alcaldia.gov	3000000004
 5	Cuerpo de Bomberos	contacto@bomberos.gov	3000000005
 6	Defensa Civil	contacto@defensacivil.org	3000000006
+8	Policía Local	contacto@policia.gov.co	3227458512
 \.
 
 
@@ -561,6 +562,11 @@ COPY grnd.moderador_sector (moderador_id, sector_id) FROM stdin;
 2	3
 3	4
 2	5
+4	1
+4	2
+4	3
+4	4
+4	5
 \.
 
 
@@ -572,8 +578,9 @@ COPY grnd.moderador_sector (moderador_id, sector_id) FROM stdin;
 
 COPY grnd.moderadores (id, nombre, email, password, "isAdmin") FROM stdin;
 2	Sara Otero	sotero@gmail.com	$2b$12$Dmhm3MKG1wCBvhADhKdAO..yVguIVjUVdkDIGV7j9nbacBRh/MTce	f
+1	Dillan Real	drealnieto@gmail.com	$2b$12$H3M5J3CEt1CgcJ9/e4e2ReMxU8so7Qt/k2YCzNSx9gNnQOsALoArC	t
 3	Julian Moreno	jmoreno@prueba.com	$2b$12$GcvPzWHfqTlwitQE25PcIerH31iezy3N5vTnuOpk1p/CxnysQzDTy	f
-1	Dillan Real	drealnieto@gmail.com	$2b$12$g7EcKX5w9rMjiEcuzVWZB.UDw4eoj0RycbAmG4wD.HENsrV31Ybwi	t
+4	ADMIN	admin@greennode.com	$2b$12$D7SliSE4SfGWJY2lSm2bqeOlvHD8g1yjNs3ERHz8YQtCBrERfLdBC	t
 \.
 
 
@@ -583,10 +590,10 @@ COPY grnd.moderadores (id, nombre, email, password, "isAdmin") FROM stdin;
 -- Data for Name: nivel_incidencia; Type: TABLE DATA; Schema: grnd; Owner: postgres
 --
 
-COPY grnd.nivel_incidencia (id, nivel, descripcion) FROM stdin;
-1	1	Bajo
-2	2	Medio
-3	3	Alto
+COPY grnd.nivel_incidencia (id, descripcion, nivel) FROM stdin;
+1	Bajo	1
+2	Medio	2
+3	Alto	3
 \.
 
 
@@ -597,18 +604,20 @@ COPY grnd.nivel_incidencia (id, nivel, descripcion) FROM stdin;
 --
 
 COPY grnd.reportes (id, descripcion, fecha, entidad_externa_id, titulo, direccion, "usuarioId", "tipoReporteId", "sectorId", "estadoId", "nivelIncidenciaId") FROM stdin;
-21	Bolsas acumuladas desde el fin de semana	2025-09-16 22:41:58.231994	1	Basura frente al parque	Cra 15 # 120-25	1	2	2	5	2
-20	Ruido por discoteca sin permisos	2025-09-15 23:42:42.825639	\N	Discoteca ilegal	Zona Rosa Bogotá	1	5	2	3	2
 19	Basura y escombros en vía	2025-09-15 23:42:42.825639	\N	Escombros abandonados	Calle 72 con Caracas	3	2	2	2	2
-18	Tala de árboles en zona protegida	2025-09-15 23:42:42.825639	\N	Tala en ronda hídrica	Parque Entrenubes	2	4	5	1	3
-17	Fuga en acueducto barrio Kennedy	2025-09-15 23:42:42.825639	\N	Fuga de agua	Barrio Kennedy Central	1	3	4	4	3
 16	Obras con maquinaria generando ruido	2025-09-15 23:42:42.825639	\N	Ruido diurno	Av. Jiménez con 7ma	3	5	4	1	1
 15	Basura en quebrada	2025-09-15 23:42:42.825639	\N	Contaminación hídrica	Quebrada Limas	2	2	2	2	2
-14	Ruido excesivo en zona residencial	2025-09-15 23:42:42.825639	\N	Ruido nocturno	Calle 127 con Av. 19	1	5	1	3	1
 13	Tala ilegal de árboles	2025-09-15 23:42:42.825639	\N	Corte de árboles no autorizado	Carrera 10 con Calle 20	3	4	3	2	2
-11	Basura acumulada en parque principal	2025-09-15 23:42:42.825639	\N	Acumulación de basura	Parque central Usaquén	1	2	1	1	2
-22	Discoteca ruidosa cerca de mi casa	2025-09-17 00:24:10.462539	\N	Ruido - Calle 78 Sur	Calle 78 Sur	1	5	1	1	2
-23	Tala ilegal de árboles	2025-09-18 02:05:27.88784	\N	Tala - Calle 53 #12-62	Calle 53 #12-62	1	4	3	1	3
+21	Bolsas acumuladas desde el fin de semana	2025-09-16 22:41:58.231994	1	Basura frente al parque	Cra 15 # 120-25	5	2	2	5	2
+20	Ruido por discoteca sin permisos	2025-09-15 23:42:42.825639	\N	Discoteca ilegal	Zona Rosa Bogotá	5	5	2	3	2
+17	Fuga en acueducto barrio Kennedy	2025-09-15 23:42:42.825639	\N	Fuga de agua	Barrio Kennedy Central	5	3	4	4	3
+14	Ruido excesivo en zona residencial	2025-09-15 23:42:42.825639	\N	Ruido nocturno	Calle 127 con Av. 19	5	5	1	3	1
+11	Basura acumulada en parque principal	2025-09-15 23:42:42.825639	\N	Acumulación de basura	Parque central Usaquén	5	2	1	1	2
+24	Reporte de prueba	2025-09-18 16:11:31.72295	\N	Otros - En ninguna lado	En ninguna lado	5	6	2	5	1
+22	Discoteca ruidosa cerca de mi casa	2025-09-17 00:24:10.462539	\N	Ruido - Calle 78 Sur	Calle 78 Sur	5	5	1	2	2
+23	Tala ilegal de árboles	2025-09-18 02:05:27.88784	3	Tala - Calle 53 #12-62	Calle 53 #12-62	5	4	3	3	3
+18	Tala de árboles en zona protegida	2025-09-15 23:42:42.825639	3	Tala en ronda hídrica	Parque Entrenubes	2	4	5	4	3
+25	Gente sacando basura fuera del horario establecido	2025-09-18 22:05:32.239607	4	Basura - Calle 78 Sur #70	Calle 78 Sur #70	5	2	3	2	3
 \.
 
 
@@ -650,10 +659,9 @@ COPY grnd.tipos_reportes (id, nombre, descripcion) FROM stdin;
 
 COPY grnd.usuarios (id, localidad_id, nombre, email, password, direccion) FROM stdin;
 3	11	Julian Moreno	jmoreno@prueba.com	$2b$12$GcvPzWHfqTlwitQE25PcIerH31iezy3N5vTnuOpk1p/CxnysQzDTy	Calle 987 Sur #123-55
-5	1	Usuario Prueba	test@test.com	$2b$12$HxZiXQ1cmEhVVFizcFrQXeB/DtIoIe7KssEgf/lSVcseh.RcQdrEy	Calle Falsa 123
 4	13	Esteban	estebitan@gmail.com	$2b$12$JcoABHWPAjIqWdXi6BiZpuSY31C7fkCFTyuAzZbAc.dGKqsijVPk.	Calle 53
-1	7	Dillan Real	drealnieto@gmail.com	$2b$12$g7EcKX5w9rMjiEcuzVWZB.UDw4eoj0RycbAmG4wD.HENsrV31Ybwi	Calle 78 Sur
 2	5	Sara Otero	sotero@gmail.com	Administrador1234!	Calle 123 # 654
+5	1	Usuario Prueba	test@gmail.com	$2b$12$HxZiXQ1cmEhVVFizcFrQXeB/DtIoIe7KssEgf/lSVcseh.RcQdrEy	Calle Falsa 123
 \.
 
 
@@ -663,7 +671,7 @@ COPY grnd.usuarios (id, localidad_id, nombre, email, password, direccion) FROM s
 -- Name: entidades_externas_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
 
-SELECT pg_catalog.setval('grnd.entidades_externas_id_seq', 6, true);
+SELECT pg_catalog.setval('grnd.entidades_externas_id_seq', 8, true);
 
 
 --
@@ -690,7 +698,7 @@ SELECT pg_catalog.setval('grnd.localidades_id_seq', 1, false);
 -- Name: moderadores_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
 
-SELECT pg_catalog.setval('grnd.moderadores_id_seq', 3, true);
+SELECT pg_catalog.setval('grnd.moderadores_id_seq', 4, true);
 
 
 --
@@ -708,7 +716,7 @@ SELECT pg_catalog.setval('grnd.nivel_incidencia_id_seq', 3, true);
 -- Name: reportes_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
 
-SELECT pg_catalog.setval('grnd.reportes_id_seq', 23, true);
+SELECT pg_catalog.setval('grnd.reportes_id_seq', 25, true);
 
 
 --
@@ -726,7 +734,7 @@ SELECT pg_catalog.setval('grnd.sectores_id_seq', 5, true);
 -- Name: tipos_reportes_id_seq; Type: SEQUENCE SET; Schema: grnd; Owner: postgres
 --
 
-SELECT pg_catalog.setval('grnd.tipos_reportes_id_seq', 6, true);
+SELECT pg_catalog.setval('grnd.tipos_reportes_id_seq', 7, true);
 
 
 --
@@ -961,11 +969,11 @@ ALTER TABLE ONLY grnd.moderador_sector
     ADD CONSTRAINT "FK_f194f5d9084a050e699c82593eb" FOREIGN KEY (moderador_id) REFERENCES grnd.moderadores(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2025-09-18 12:32:17
+-- Completed on 2025-09-18 22:15:37
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict W830kiI5GaSKKZeJRzFeWveQQ0ahYMRuXtlbsgnKT6ZnLKRe21Vrc48k2PdZQua
+\unrestrict 8Deqdt2hg9RfGzpxZNPj1cXHrxYrKXzylaF2tyJTemvJWPiC21vnbDrQeRU3w10
 
