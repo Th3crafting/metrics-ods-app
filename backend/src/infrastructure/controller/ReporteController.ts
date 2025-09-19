@@ -7,7 +7,7 @@ import { ReporteEntity } from "../entities/ReporteEntity";
 import { ESTADOS } from "../constants/estados";
 import { DashboardResponse, DashboardReportItem } from "../interfaces/MyDashboard";
 
-type RequestWithUser = Request & { user?: { id: number; email?: string } };
+type RequestWithUser = Request & { auth?: { id: number; email?: string } };
 
 export class ReporteController {
     private app: ReporteApplication;
@@ -18,11 +18,11 @@ export class ReporteController {
 
     createReporte = async (req: RequestWithUser, res: Response) => {
         try {
-            if (!req.user?.id) {
+            if (!req.auth?.id) {
             return res.status(401).json({ message: "No autorizado" });
             }
 
-            const userId = Number(req.user.id);
+            const userId = Number(req.auth.id);
             if (!Number.isInteger(userId) || userId <= 0) {
             return res.status(400).json({ message: "ID inválido" });
             }
@@ -62,7 +62,7 @@ export class ReporteController {
 
     updateReporte = async (req: RequestWithUser, res: Response) => {
         try {
-            if (!req.user?.id) return res.status(401).json({ message: "No autorizado" });
+            if (!req.auth?.id) return res.status(401).json({ message: "No autorizado" });
 
             const id = Number(req.params.id);
             if (!Number.isInteger(id) || id <= 0) {
@@ -150,7 +150,7 @@ export class ReporteController {
 
     async summary(request: Request, response: Response): Promise<Response> {
         try {
-            const userId = (request as any).user?.id;
+            const userId = (request as any).auth?.id;
             if (!userId) return response.status(401).json({message: "No autorizado"});
 
             const repo = AppDataSource.getRepository(ReporteEntity);
@@ -176,15 +176,21 @@ export class ReporteController {
 
     async myDashboard(request: Request, response: Response): Promise<Response> {
         try {
-            const userId = (request as any).user?.id;
-            if (!userId) return response.status(401).json({message: "No autorizado"});
+            const auth = (request as any).auth ?? (request as any).user;
+            if (!auth) return response.status(401).json({message: "No autorizado"});
 
             const repo = AppDataSource.getRepository(ReporteEntity);
 
-            const baseQB = repo
-                .createQueryBuilder("r")
+            const baseQB = repo.createQueryBuilder("r")
                 .leftJoinAndSelect("r.tipoReporte", "tipoReporte")
-                .where("r.usuarioId = :userId", {userId});
+                .leftJoinAndSelect("r.usuario", "usuario")
+                .leftJoinAndSelect("r.nivelIncidencia", "nivel");
+
+            const role = (auth as any).role ?? "user";
+            
+            if (role === "user") {
+                baseQB.where("r.usuarioId = :userId", { userId: auth.id });
+            }
 
             const now = new Date();
             const start = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -236,15 +242,30 @@ export class ReporteController {
                 listFor(ESTADOS.RECHAZADO),
             ]);
 
-            const toCard = (r: ReporteEntity): DashboardReportItem => ({
-                id: r.id,
-                titulo: r.titulo ?? "",
-                descripcion: r.descripcion ?? null,
-                direccion: r.direccion ?? "",
-                fecha: r.fecha instanceof Date ? r.fecha.toISOString() : String(r.fecha),
-                tipoReporteId: r.tipoReporte?.id ?? 0,
-                tipoReporteNombre: r.tipoReporte.nombre ?? "",
-            });
+            const toCard = (r: ReporteEntity): DashboardReportItem => {
+                const reporter =
+                    (r as any).usuario?.nombre ||
+                    (r as any).usuario?.email ||
+                    (typeof (r as any).usuarioId === "number" ? `ID #${(r as any).usuarioId}` : "—");
+
+                const rawNivel = ((r as any).nivel?.descripcion || (r as any).nivelIncidencia?.descripcion || "").toString().toLowerCase();
+                const urgency: "baja" | "media" | "alta" =
+                    rawNivel.includes("alto")  ? "alta"  :
+                    rawNivel.includes("medio") ? "media" :
+                    rawNivel.includes("bajo")  ? "baja"  : "media";
+
+                return {
+                    id: r.id,
+                    titulo: r.titulo ?? "",
+                    descripcion: r.descripcion ?? null,
+                    direccion: r.direccion ?? "",
+                    fecha: r.fecha instanceof Date ? r.fecha.toISOString() : String(r.fecha),
+                    tipoReporteId: r.tipoReporte?.id ?? 0,
+                    tipoReporteNombre: r.tipoReporte?.nombre ?? "",
+                    urgency,
+                    reporter,
+                };
+            };
 
             const abiertosDTO   = abiertos.map(toCard);
             const pendientesDTO = pendientes.map(toCard);

@@ -49,6 +49,16 @@ export class UserApplication {
                 throw new Error("Error en actualizar el email ¡NO DISPONIBLE!");
             }
         }
+        
+        if("password" in user) {
+            const pwd = (user.password ?? "").trim();
+            if (!pwd) {
+                delete user.password;
+            } else {
+                const hashedPass = await bcrypt.hash(pwd, 12);
+                user.password = hashedPass;
+            }
+        }
         return await this.port.updateUser(id,user);
     }
 

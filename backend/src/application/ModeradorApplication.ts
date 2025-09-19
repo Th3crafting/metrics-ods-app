@@ -45,9 +45,28 @@ export class ModeradorApplication {
     }
 
     async updateModerador(id: number, moderador: Partial<Moderador>): Promise<boolean> {
-        const existing = await this.port.getModeradorById(id);
-        if (!existing) throw new Error("Moderador no encontrado");
-        return await this.port.updateModerador(id, moderador);
+        const existingModerador = await this.port.getModeradorById(id);
+        if(!existingModerador) {
+            throw new Error("El usuario no existe");
+        }
+
+        if(moderador.email) {
+            const emailTaken = await this.port.getModeradorByEmail(moderador.email);
+            if(emailTaken && emailTaken.id !== id) {
+                throw new Error("Error en actualizar el email ¡NO DISPONIBLE!");
+            }
+        }
+        
+        if("password" in moderador) {
+            const pwd = (moderador.password ?? "").trim();
+            if (!pwd) {
+                delete moderador.password;
+            } else {
+                const hashedPass = await bcrypt.hash(pwd, 12);
+                moderador.password = hashedPass;
+            }
+        }
+        return await this.port.updateModerador(id,moderador);
     }
 
     async deleteModerador(id: number): Promise<boolean> {
@@ -62,5 +81,13 @@ export class ModeradorApplication {
 
     async getModeradorById(id: number): Promise<Moderador | null> {
         return await this.port.getModeradorById(id);
+    }
+
+    async getSectoresIds(moderadorId: number) {
+        return this.port.getSectoresIds(moderadorId);
+    }
+
+    async setSectores(moderadorId: number, sectorIds: number[]): Promise<boolean> {
+        return this.port.setSectores(moderadorId, sectorIds);
     }
 }
