@@ -157,7 +157,7 @@ export class UserController{
 
     async infoUser(request: Request, response: Response): Promise<Response>{
         try {
-            const userId = (request as any).user.id;
+            const userId = (request as any).auth.id;
             if (!userId) return response.status(401).json({message: "No autorizado"});
 
             const repo = AppDataSource.getRepository(UsuarioEntity);

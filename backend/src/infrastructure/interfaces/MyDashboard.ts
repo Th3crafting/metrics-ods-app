@@ -19,6 +19,8 @@ export interface DashboardReportItem {
     fecha: string;
     tipoReporteId: number;
     tipoReporteNombre: string;
+    urgency: "baja" | "media" | "alta"
+    reporter: string
 }
 
 export interface DashboardResponse {

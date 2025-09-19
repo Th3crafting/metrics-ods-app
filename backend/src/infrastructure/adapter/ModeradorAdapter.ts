@@ -1,15 +1,18 @@
-import { Repository } from "typeorm";
+import { Repository, In } from "typeorm";
 
 import { Moderador } from "../../domain/moderador/Moderador";
 import { ModeradorPort } from "../../domain/moderador/ModeradorPort";
 import { ModeradorEntity } from "../entities/ModeradorEntity";
 import { AppDataSource } from "../config/con_data_base";
+import { SectorEntity } from "../entities/SectorEntity";
 
 export class ModeradorAdapter implements ModeradorPort {
     private moderadorRepository: Repository<ModeradorEntity>;
+    private sectorRepository: Repository<SectorEntity>;
 
     constructor() {
         this.moderadorRepository = AppDataSource.getRepository(ModeradorEntity);
+        this.sectorRepository = AppDataSource.getRepository(SectorEntity);
     }
 
     private toDomain(m: ModeradorEntity): Moderador {
@@ -71,5 +74,39 @@ export class ModeradorAdapter implements ModeradorPort {
     async getModeradorByEmail(email: string): Promise<Moderador | null> {
         const moderador = await this.moderadorRepository.findOne({ where: { email } });
         return moderador ? this.toDomain(moderador) : null;
+    }
+
+    async getSectoresIds(moderadorid: number): Promise<number[]> {
+        const mod = await this.moderadorRepository.findOne({
+            where: { id: moderadorid },
+            relations: ["sectores"],
+            select: { id: true, sectores: { id: true } as any },
+        });
+        if (!mod) return [];
+        return (mod.sectores ?? []).map(s => Number(s.id));
+    }
+
+    async setSectores(moderadorId: number, sectorIds: number[]): Promise<boolean> {
+        const mod = await this.moderadorRepository.findOne({
+            where: { id: moderadorId },
+            relations: ["sectores"],
+        });
+        if (!mod) return false;
+
+        const cleanIds = Array.from(
+            new Set(sectorIds.map(Number).filter(n => Number.isInteger(n) && n > 0))
+        );
+
+        const sectors = cleanIds.length
+            ? await this.sectorRepository.findBy({ id: In(cleanIds) })
+            : [];
+
+        if (sectors.length !== cleanIds.length) {
+            throw new Error("Uno o más sectores no existen");
+        }
+
+        mod.sectores = sectors;
+        await this.moderadorRepository.save(mod);
+        return true;
     }
 }

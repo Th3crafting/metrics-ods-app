@@ -7,4 +7,7 @@ export interface ModeradorPort {
     getAllModeradores(): Promise<Moderador[]>;
     getModeradorById(id: number): Promise<Moderador | null>;
     getModeradorByEmail(email: string): Promise<Moderador | null>;
+
+    getSectoresIds(moderadorId: number): Promise<number[]>;
+    setSectores(moderadorId: number, sectorIds: number[]): Promise<boolean>;
 }
